@@ -6,6 +6,7 @@
 #define SLATFORMER_RENDERWINDOW_H
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "Entity.h"
 
 class RenderWindow
 {
@@ -14,7 +15,7 @@ public:
     SDL_Texture* loadTexture(const char* p_filePath);
     void cleanUp();
     void clear();
-    void render(SDL_Texture* p_texture);
+    void render(Entity& p_texture);
     void display();
 private:
     SDL_Window* window;

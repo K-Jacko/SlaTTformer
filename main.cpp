@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "Entity.h"
 #include "RenderWindow.h"
 
 int main(int argc, char* args[]) {
@@ -18,6 +19,15 @@ int main(int argc, char* args[]) {
 
     SDL_Texture* grassTexture = window.loadTexture("resources/Tileset.png");
 
+    Entity entities[30];
+
+    for (int i = 0; i < 29; ++i)
+    {
+        entities[i].setX(i * 48);
+        entities[i].setY(700);
+        entities[i].SetTexture(grassTexture);
+    }
+
     bool gameRunning = true;
 
     SDL_Event event;
@@ -31,7 +41,9 @@ int main(int argc, char* args[]) {
         }
 
         window.clear();
-        window.render(grassTexture);
+        for (int i = 0; i < 29; ++i) {
+            window.render(entities[i]);
+        }
         window.display();
     }
 
