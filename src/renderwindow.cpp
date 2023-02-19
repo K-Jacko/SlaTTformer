@@ -1,5 +1,5 @@
 #include <iostream>
-#include "RenderWindow.h"
+#include "../include/RenderWindow.h"
 
 RenderWindow::RenderWindow(const char *p_title, int p_w, int p_h)
 {

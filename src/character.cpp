@@ -1,8 +1,8 @@
 //
 // Created by Wake on 2/19/2023.
 //
-#include "Character.h"
-#include "Entity.h"
+#include "../include/Character.h"
+#include "../include/Entity.h"
 
 Character::Character() {}
 

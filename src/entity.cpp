@@ -1,7 +1,7 @@
-#include "Entity.h"
+#include "../include/Entity.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Math.h"
+#include "../include/Math.h"
 
 
 Entity::Entity(float p_x, float p_y, SDL_Texture *p_texture)

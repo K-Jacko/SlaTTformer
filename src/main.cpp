@@ -1,9 +1,9 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Entity.h"
-#include "RenderWindow.h"
-#include "Character.h"
+#include "../include/Entity.h"
+#include "../include/RenderWindow.h"
+#include "../include/Character.h"
 
 void HandleEntities(SDL_Texture* textures[]);
 
