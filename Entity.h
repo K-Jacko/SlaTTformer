@@ -19,7 +19,8 @@ public:
     void setY(float Y);
     void SetTexture(SDL_Texture* ptexture);
     SDL_Texture* getTexture();
-    SDL_Rect getCurrentFrame();
+    SDL_Rect* getCurrentFrame();
+    void SetCurrentFrame(SDL_Rect frame);
 private:
     float x, y;
     SDL_Rect currentFrame;

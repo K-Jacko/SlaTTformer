@@ -10,7 +10,7 @@ RenderWindow::RenderWindow(const char *p_title, int p_w, int p_h)
         std::cout << "ERROR" << SDL_GetError() << std::endl;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
 SDL_Texture* RenderWindow::loadTexture(const char *p_filePath)
@@ -34,21 +34,44 @@ void RenderWindow::clear()
     SDL_RenderClear(renderer);
 }
 
-void RenderWindow::render(Entity& p_Entity)
+void RenderWindow::renderEntity(Entity& entity)
+{
+    SDL_Rect dst;
+    dst.x = entity.getX();
+    dst.y = entity.getY();
+    dst.w = entity.getCurrentFrame()->w;
+    dst.h = entity.getCurrentFrame()->h;
+
+    SDL_RenderCopy(renderer, entity.getTexture(), entity.getCurrentFrame(), &dst);
+}
+
+void RenderWindow::renderBackground(SDL_Texture &texture)
 {
     SDL_Rect src;
-    src.x = p_Entity.getCurrentFrame().x;
-    src.y = p_Entity.getCurrentFrame().y;
-    src.w = p_Entity.getCurrentFrame().w;
-    src.h = p_Entity.getCurrentFrame().h;
+    src.x = 0;
+    src.y = 0;
+    src.w = 928;
+    src.h = 793;
 
     SDL_Rect dst;
-    dst.x = p_Entity.getX();
-    dst.y = p_Entity.getY();
-    dst.w = p_Entity.getCurrentFrame().w;
-    dst.h = p_Entity.getCurrentFrame().h;
+    dst.x = 0;
+    dst.y = 0;
+    dst.w = 1280;
+    dst.h = 720;
 
-    SDL_RenderCopy(renderer, p_Entity.getTexture(), &src, &dst);
+    SDL_RenderCopy(renderer, &texture, &src, &dst);
+
+}
+
+void RenderWindow::renderCharacter(Entity& entity)
+{
+    SDL_Rect dst;
+    dst.x = entity.getX();
+    dst.y = entity.getY();
+    dst.w = 100;
+    dst.h = 100;
+
+    SDL_RenderCopy(renderer, entity.getTexture(), entity.getCurrentFrame(), &dst);
 }
 
 void RenderWindow::display()

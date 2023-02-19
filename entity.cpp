@@ -27,5 +27,6 @@ float Entity::getY() {return y;}
 void Entity::setY(float Y) {y = Y;}
 SDL_Texture* Entity::getTexture() {return texture;}
 void Entity::SetTexture(SDL_Texture* ptexture){texture = ptexture;}
-SDL_Rect Entity::getCurrentFrame() {return currentFrame;}
+SDL_Rect* Entity::getCurrentFrame() {return &currentFrame;}
+void Entity::SetCurrentFrame(SDL_Rect frame){currentFrame = frame;}
 
