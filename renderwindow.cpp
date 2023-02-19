@@ -37,8 +37,8 @@ void RenderWindow::clear()
 void RenderWindow::renderEntity(Entity& entity)
 {
     SDL_Rect dst;
-    dst.x = entity.getX();
-    dst.y = entity.getY();
+    dst.x = entity.GetPosition().x;
+    dst.y = entity.GetPosition().y;
     dst.w = entity.getCurrentFrame()->w;
     dst.h = entity.getCurrentFrame()->h;
 
@@ -66,8 +66,8 @@ void RenderWindow::renderBackground(SDL_Texture &texture)
 void RenderWindow::renderCharacter(Entity& entity)
 {
     SDL_Rect dst;
-    dst.x = entity.getX();
-    dst.y = entity.getY();
+    dst.x = entity.GetPosition().x;
+    dst.y = entity.GetPosition().y;
     dst.w = 100;
     dst.h = 100;
 

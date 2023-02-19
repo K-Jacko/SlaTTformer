@@ -51,16 +51,16 @@ int main(int argc, char* args[]) {
             {
                 switch (event.key.keysym.sym) {
                     case SDLK_w:
-                        entities[1].setY(entities[1].getY() - 7);
+                        entities[1].position.y -= 7;
                         break;
                     case SDLK_s:
-                        entities[1].setY(entities[1].getY() + 7);
+                        entities[1].position.y += 7;
                         break;
                     case SDLK_a:
-                        entities[1].setX(entities[1].getX() - 7);
+                        entities[1].position.x -= 7;
                         break;
                     case SDLK_d:
-                        entities[1].setX(entities[1].getX() + 7);
+                        entities[1].position.x += 7;
                         break;
                 }
             }
@@ -100,8 +100,7 @@ void HandleEntities(SDL_Texture* textures[])
     entities[1].SetTexture(textures[1]);
     for (int i = 2; i < 29; ++i)
     {
-        entities[i].setX((i - 2) * 48);
-        entities[i].setY(700);
+        entities[i].SetPosition((i - 2) * 48, 700);
         entities[i].SetTexture(textures[2]);
     }
     CreateCharacter();
@@ -116,6 +115,5 @@ void CreateCharacter()
     dst.w = 100;
     dst.h = 100;
     entities[1].SetCurrentFrame(dst);
-    entities[1].setX(70);
-    entities[1].setY(599);
+    entities[1].SetPosition(70,599);
 }
