@@ -1,8 +1,15 @@
 #include "../include/Entity.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "../include/Math.h"
 
+void Entity::Init(RenderWindow* renderer, SDL_Texture* texture)
+{
+    this->texture = texture;
+
+    collider = Collider();
+
+}
 
 Entity::Entity(float p_x, float p_y, SDL_Texture *p_texture)
 :position(*new Vector2f(p_x,p_y)), texture(p_texture)
@@ -21,12 +28,13 @@ Entity::Entity()
     currentFrame.h = 48;
     currentFrame.w = 48;
 }
+
 Vector2f Entity::GetPosition(){return position;}
-void Entity::SetPosition(float px, float py){position = *new Vector2f(px,py);}
-void Entity::SetX(float x){position.x = x;}
-void Entity::SetY(float y){position.y = y;}
 SDL_Texture* Entity::getTexture() {return texture;}
-void Entity::SetTexture(SDL_Texture* ptexture){texture = ptexture;}
 SDL_Rect* Entity::getCurrentFrame() {return &currentFrame;}
+void Entity::SetPosition(float px, float py){position = *new Vector2f(px,py);}
+void Entity::SetTexture(SDL_Texture* ptexture){texture = ptexture;}
 void Entity::SetCurrentFrame(SDL_Rect frame){currentFrame = frame;}
+
+
 

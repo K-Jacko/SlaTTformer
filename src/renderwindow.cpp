@@ -13,6 +13,11 @@ RenderWindow::RenderWindow(const char *p_title, int p_w, int p_h)
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
+int RenderWindow::getRefreshRate()
+{
+    return 1;
+}
+
 SDL_Texture* RenderWindow::loadTexture(const char *p_filePath)
 {
     SDL_Texture* texture = NULL;
@@ -74,10 +79,9 @@ void RenderWindow::renderCharacter(Entity& entity)
     SDL_RenderCopy(renderer, entity.getTexture(), entity.getCurrentFrame(), &dst);
 }
 
-void RenderWindow::display()
-{
-    SDL_RenderPresent(renderer);
-}
+SDL_Renderer* RenderWindow::GetRenderer(){  return renderer;}
+
+void RenderWindow::display(){   SDL_RenderPresent(renderer);}
 
 
 

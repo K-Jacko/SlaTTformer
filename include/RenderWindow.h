@@ -4,8 +4,8 @@
 
 #ifndef SLATFORMER_RENDERWINDOW_H
 #define SLATFORMER_RENDERWINDOW_H
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "Entity.h"
 
 class RenderWindow
@@ -13,6 +13,8 @@ class RenderWindow
 public:
     RenderWindow(const char* p_title, int p_w, int p_h);
     SDL_Texture* loadTexture(const char* p_filePath);
+    int getRefreshRate();
+    SDL_Renderer* GetRenderer();
     void cleanUp();
     void clear();
     void renderCharacter(Entity &entity);

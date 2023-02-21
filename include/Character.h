@@ -11,12 +11,13 @@ class Character : public Entity
 {
 public:
     Character();
-void SetX(int x);
-void SetY(int y);
-int getX();
-int getY();
     int characterSpeed;
+    void Init(RenderWindow* renderer, SDL_Texture* texture);
+    void UpdatePosition(SDL_Event event);
+
 private:
     int posX, posY;
+
+
 };
 #endif //SLATFORMER_CHARACTER_H
