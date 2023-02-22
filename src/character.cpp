@@ -1,24 +1,24 @@
-//
-// Created by Wake on 2/19/2023.
-//
-#include "../include/Character.h"
-#include "../include/Entity.h"
+#include "Character.h"
+#include "Entity.h"
 
-Character::Character() {}
+Character::Character()
+{
+
+}
+
+
 
 void Character::Init(RenderWindow* renderer, SDL_Texture* texture)
 {
 
-    SDL_Rect dst;
-    dst.x = 0;
-    dst.y = 0;
-    dst.w = 120;
-    dst.h = 80;
-    this->SetCurrentFrame(dst);
+
+    this->SetCurrentFrame(this->dst);
     this->SetPosition(70,619);
 }
 
-void Character::UpdatePosition(SDL_Event event){
+void Character::UpdatePosition(SDL_Event event)
+{
+
     switch (event.key.keysym.sym) {
         case SDLK_w:
             position.y -= characterSpeed;

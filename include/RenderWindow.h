@@ -6,7 +6,6 @@
 #define SLATFORMER_RENDERWINDOW_H
 #include <SDL.h>
 #include <SDL_image.h>
-#include "Entity.h"
 
 class RenderWindow
 {
@@ -15,10 +14,11 @@ public:
     SDL_Texture* loadTexture(const char* p_filePath);
     int getRefreshRate();
     SDL_Renderer* GetRenderer();
+    SDL_Window* GetWindow();
+
     void cleanUp();
     void clear();
-    void renderCharacter(Entity &entity);
-    void renderEntity(Entity& entity);
+    void renderEntity(SDL_Texture &texture, SDL_Rect src, SDL_Rect dst);
     void renderBackground(SDL_Texture &texture);
     void display();
 private:

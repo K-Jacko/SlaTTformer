@@ -3,9 +3,19 @@
 //
 
 #include "Collider.h"
+#include <SDL.h>
+
+Collider::Collider(){
+
+};
 
 Collider::Collider(int x, int y, int w, int h)
 :_x(x), _y(y), _w(w), _h(h)
+{
+
+}
+Collider::Collider(SDL_Rect* rect)
+:_x(rect->x), _y(rect->x), _w(rect->x), _h(rect->x)
 {
 
 }

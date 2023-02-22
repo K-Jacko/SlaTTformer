@@ -9,9 +9,8 @@ class FloorTile : Entity
 {
 public:
     FloorTile();
-    explicit FloorTile(SDL_Texture* _texture);
-    void Init(SDL_Renderer *renderer, SDL_Texture *texture) override;
+    void Init(RenderWindow* renderWindow,SDL_Texture &texture);
+    void RenderEntity();
 private:
-
 };
 #endif //SLATFORMER_FLOORTILE_H

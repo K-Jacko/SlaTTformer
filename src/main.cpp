@@ -9,18 +9,22 @@
 #include "Utils.h"
 #include "FloorTile.h"
 
+#define FLOORTILE_NUMBER = int 7
+
 void HandleEntities(SDL_Texture* textures[]);
 
 void LoadTextures(RenderWindow window);
 
-void RenderTextures(RenderWindow window);
+void RenderTextures();
 
 void CreateCharacter();
 
-void BuildColliders(RenderWindow window);
+void InitEntities(SDL_Texture* textures[], RenderWindow* renderWindow);
 
 int fps = 0;
 float fpsTimer = 0.0f;
+FloorTile floorTiles[7];
+Entity entities[0];
 Character player;
 
 int main(int argc, char* args[]) {
@@ -52,7 +56,6 @@ int main(int argc, char* args[]) {
     RenderWindow window("GAME", 1280, 720);
 
     LoadTextures(window);
-    CreateCharacter();
 
     bool gameRunning = true;
 
@@ -93,8 +96,14 @@ int main(int argc, char* args[]) {
         }
 
         window.clear();
-        RenderTextures(window);
-        BuildColliders(window);
+        RenderTextures();
+        SDL_Texture* test  = window.loadTexture("resources/Background.png");
+        SDL_Rect dst;
+        dst.x = 0;
+        dst.y = 0;
+        dst.h = 100;
+        dst.w = 100;
+        window.renderBackground(*test);
         window.display();
 
     }
@@ -109,58 +118,54 @@ int main(int argc, char* args[]) {
     //Generate
 }
 
-void BuildColliders(RenderWindow window)
-{
-    SDL_Renderer* renderer = window.GetRenderer();
-
-
-}
-
-void RenderTextures(RenderWindow window)
-{
-
-    window.renderBackground(*entities[0].getTexture());
-    window.renderEntity(entities[1]);
-    for (int i = 2; i < 35; ++i) {
-        window.renderCharacter(entities[i]);
-    }
-
-}
-
 void LoadTextures(RenderWindow window)
 {
     SDL_Texture* textures[3];
     textures[0] = window.loadTexture("resources/Background.png");
     textures[1] = window.loadTexture("resources/Character/_Idle.png");
     textures[2] = window.loadTexture("resources/Tileset.png");
-    HandleEntities(textures);
+    InitEntities(textures, &window);
 }
 
 void InitEntities(SDL_Texture* textures[], RenderWindow* renderWindow)
 {
-    FloorTile floorTiles[35];
-    for (int i = 0; i < 34; ++i) {
+    for (int i = 0; i < SDL_arraysize(floorTiles); ++i) {
         floorTiles[i].Init(renderWindow, textures[2]);
     }
-
     player.Init(renderWindow, textures[1]);
 
-    floorTiles[0].Init(renderer, textures[0]);
-
-    entities[0].Init(renderer, textures[0]);
-    entities[1].Init(renderer, textures[1]);
 
 
-    for (int i = 2; i < 29; ++i)
-    {
-        entities[i].SetPosition((i - 2) * 48, 700);
-        entities[i].SetTexture(textures[2]);
-    }
-    CreateCharacter();
+//    floorTiles[0].Init(renderer, textures[0]);
+//
+//    entities[0].Init(renderer, textures[0]);
+//    entities[1].Init(renderer, textures[1]);
+//
+//
+//    for (int i = 2; i < 29; ++i)
+//    {
+//        entities[i].SetPosition((i - 2) * 48, 700);
+//        entities[i].SetTexture(textures[2]);
+//    }
+//    CreateCharacter();
 
 }
 
-void HandleEntities()
+void RenderTextures()
+{
+    for (int i = 0; i < SDL_arraysize(floorTiles); ++i) {
+        floorTiles[i].RenderEntity();
+    }
+
+//    window.renderBackground(*entities[0].getTexture());
+//    window.renderEntity(entities[1]);
+//    for (int i = 2; i < 35; ++i) {
+//        window.renderCharacter(entities[i]);
+//    }
+
+}
+
+void HandleEntities(SDL_Texture* textures[])
 {
     Entity entities[40];
 }
@@ -169,7 +174,7 @@ void CreateCharacter()
 {
 
 
-    entities[1] = character;
+    //entities[1] = character;
     //character.Init();
 
 }

@@ -1,11 +1,23 @@
-//
-// Created by Wake on 2/20/2023.
-//
 #include "Entity.h"
 #include "FloorTile.h"
 
-FloorTile::FloorTile(SDL_Texture* _texture)
+FloorTile::FloorTile()
 {
-    this->SetTexture(_texture);
-    this->SetPosition(0,0);
+    texture = NULL;
+    position = *new Vector2f();
+    currentFrame.x = 0;
+    currentFrame.y = 0;
+    currentFrame.h = 48;
+    currentFrame.w = 48;
+}
+void FloorTile::Init(RenderWindow* renderWindow,SDL_Texture &texture)
+{
+    this->texture = texture;
+    this->window = renderWindow;
+    SetupCollider();
+}
+
+void FloorTile::RenderEntity()
+{
+    window->renderEntity(texture, &currentFrame,&dst);
 }

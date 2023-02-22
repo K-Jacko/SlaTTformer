@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/RenderWindow.h"
+#include "RenderWindow.h"
 
 RenderWindow::RenderWindow(const char *p_title, int p_w, int p_h)
 {
@@ -39,15 +39,15 @@ void RenderWindow::clear()
     SDL_RenderClear(renderer);
 }
 
-void RenderWindow::renderEntity(Entity& entity)
+void RenderWindow::renderEntity(SDL_Texture &texture, SDL_Rect src, SDL_Rect dst)
 {
-    SDL_Rect dst;
-    dst.x = entity.GetPosition().x;
-    dst.y = entity.GetPosition().y;
-    dst.w = entity.getCurrentFrame()->w;
-    dst.h = entity.getCurrentFrame()->h;
+//    SDL_Rect dst;
+//    dst.x = entity.GetPosition().x;
+//    dst.y = entity.GetPosition().y;
+//    dst.w = entity.getCurrentFrame()->w;
+//    dst.h = entity.getCurrentFrame()->h;
 
-    SDL_RenderCopy(renderer, entity.getTexture(), entity.getCurrentFrame(), &dst);
+    SDL_RenderCopy(renderer, texture, src, dst);
 }
 
 void RenderWindow::renderBackground(SDL_Texture &texture)
@@ -68,18 +68,19 @@ void RenderWindow::renderBackground(SDL_Texture &texture)
 
 }
 
-void RenderWindow::renderCharacter(Entity& entity)
-{
-    SDL_Rect dst;
-    dst.x = entity.GetPosition().x;
-    dst.y = entity.GetPosition().y;
-    dst.w = 100;
-    dst.h = 100;
+//void RenderWindow:renderCharacter(Entity& entity)
+//{
+//    SDL_Rect dst;
+//    dst.x = entity.GetPosition().x;
+//    dst.y = entity.GetPosition().y;
+//    dst.w = 100;
+//    dst.h = 100;
+//
+//    SDL_RenderCopy(renderer, entity.getTexture(), entity.getCurrentFrame(), &dst);
+//}
 
-    SDL_RenderCopy(renderer, entity.getTexture(), entity.getCurrentFrame(), &dst);
-}
-
-SDL_Renderer* RenderWindow::GetRenderer(){  return renderer;}
+SDL_Renderer* RenderWindow::GetRenderer(){  return SDL_GetRenderer(window);}
+SDL_Window* RenderWindow::GetWindow() {return window;}
 
 void RenderWindow::display(){   SDL_RenderPresent(renderer);}
 

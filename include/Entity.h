@@ -12,26 +12,34 @@
 #include "RenderWindow.h"
 
 
+
 class Entity
 {
 public:
     Entity();
     Entity(float p_x, float p_y, SDL_Texture* p_texture);
     Vector2f position;
+    SDL_Rect dst;
+    SDL_Rect currentFrame;
+    SDL_Texture texture;
     Vector2f GetPosition();
     SDL_Texture* getTexture();
     SDL_Rect* getCurrentFrame();
     Collider collider;
+    RenderWindow* window;
+    SDL_Renderer* renderer;
+
+    virtual void Init(RenderWindow* renderWindow,SDL_Texture* texture);
+    void RenderEntity();
     void SetPosition(float px, float py);
     void SetTexture(SDL_Texture* ptexture);
     void SetCurrentFrame(SDL_Rect frame);
-    virtual void Init(RenderWindow* renderer, SDL_Texture* texture);
-
+    void SetupCollider();
+    void DebugLines(SDL_Rect* rect);
 private:
-    SDL_Rect currentFrame;
-    SDL_Texture* texture;
-    SDL_Renderer* renderer;
-    void SetupRenderer();
+
+
+
 };
 
 #endif //SLATFORMER_ENTITY_H
