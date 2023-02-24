@@ -8,8 +8,13 @@ Currently you are a knight
 
 ## Latest Build
 
-### V 0.1
-- V 1.0
+### V 0.2
+- V 0.2
+- Map and tilemap implemented
+- GameObjects BABYY
+- <img src="resources/knight3.gif">
+-----------
+- V 0.1
 - <img src="resources/knight1.PNG"> 
 - <img src="resources/knight2.PNG"> 
 - Cannot download yet
