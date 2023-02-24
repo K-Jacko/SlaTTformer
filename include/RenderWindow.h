@@ -4,8 +4,7 @@
 
 #ifndef SLATFORMER_RENDERWINDOW_H
 #define SLATFORMER_RENDERWINDOW_H
-#include <SDL.h>
-#include <SDL_image.h>
+#include "Game.h"
 
 class RenderWindow
 {

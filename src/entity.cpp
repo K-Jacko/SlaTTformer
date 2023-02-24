@@ -51,7 +51,7 @@ void Entity::SetupCollider()
 
 void Entity::RenderEntity()
 {
-    window->renderEntity(texture, &currentFrame,&dst);
+//    window->renderEntity(texture, &currentFrame,&dst);
 }
 
 void Entity::DebugLines(SDL_Rect* rect)

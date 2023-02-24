@@ -11,6 +11,8 @@ struct Vector2f
     :x(0.0f), y(0.0f){}
     Vector2f(float _x,float _y)
     :x(_x), y(_y){};
+    Vector2f(Vector2f* ref)
+    :x(ref->x), y(ref->y){};
     float x, y;
 
     void print()

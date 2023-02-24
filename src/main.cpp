@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <thread>
+#include "Game.h"
 #include "Entity.h"
 #include "RenderWindow.h"
 #include "Character.h"
@@ -21,96 +22,97 @@ void CreateCharacter();
 
 void InitEntities(SDL_Texture* textures[], RenderWindow* renderWindow);
 
-int fps = 0;
-float fpsTimer = 0.0f;
-FloorTile floorTiles[7];
-Entity entities[0];
-Character player;
 
-int main(int argc, char* args[]) {
+//FloorTile floorTiles[7];
+//Entity entities[0];
+//Character player;
 
-    const char* dllPath = "C:/Users/Wake/API/SDL2/bin/SDL2_ttf.dll";
+Game* game = nullptr;
 
-    // Load the SDL2_ttf library
-    void* ttfLibrary = SDL_LoadObject(dllPath);
-    if (ttfLibrary == nullptr) {
-        std::cerr << "Failed to load SDL2_ttf library: " << SDL_GetError() << std::endl;
-        return 1;
-    }
+int main(int argc, char* args[])
+{
+    const int fps = 60;
+    const int frameDelay = 1000 / fps;
 
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    Uint32 frameStart;
+    int frameTime;
+
+    game = new Game();
+    game->Init("Cozy",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,720,1280,false);
+    while (game->Running())
     {
-        std::cout << "ERROR" << SDL_GetError() << std::endl;
-    }
+        frameStart = SDL_GetTicks();
 
-    if(!IMG_Init(IMG_INIT_PNG))
-    {
-        std::cout << "ERROR" << SDL_GetError() << std::endl;
-    }
+        game->HandleEvents();
+        game->Update();
+        game->Render();
 
-    if(TTF_Init() != 0)
-    {
-        std::cout << "ERROR" << SDL_GetError() << std::endl;
-    }
+        frameStart = SDL_GetTicks() - frameStart;
 
-    RenderWindow window("GAME", 1280, 720);
-
-    LoadTextures(window);
-
-    bool gameRunning = true;
-
-    SDL_Event event;
-
-    const float deltaTime = 0.01f;
-    float accumulator = 0.0f;
-    float currentTime = utils::hireTimeInSeconds();
-
-    while(gameRunning)
-    {
-        float newTime = utils::hireTimeInSeconds();
-        float frameTime = newTime - currentTime;
-
-        currentTime = newTime;
-
-        accumulator += frameTime;
-
-        while (accumulator >= deltaTime)
+        if(frameDelay > frameTime)
         {
-            while(SDL_PollEvent(&event))
-            {
-                if (!(event.type == SDL_QUIT)) {
-                    if (event.type == SDL_KEYDOWN) {
-                        player.UpdatePosition(event);
-                    }
-                } else
-                    gameRunning = false;
-
-            }
-
-            accumulator -= deltaTime;
+            SDL_Delay(frameDelay - frameStart);
         }
-        if(fpsTimer >= 1.0f)
-        {
-            fps = static_cast<int>(1.9f / frameTime);
-            fpsTimer -= 1.0f;
-        }
-
-        window.clear();
-        RenderTextures();
-        SDL_Texture* test  = window.loadTexture("resources/Background.png");
-        SDL_Rect dst;
-        dst.x = 0;
-        dst.y = 0;
-        dst.h = 100;
-        dst.w = 100;
-        window.renderBackground(*test);
-        window.display();
-
     }
-    window.cleanUp();
-    SDL_Quit();
-
+    game->Clean();
     return 0;
+
+//    LoadTextures(window);
+//
+//    bool gameRunning = true;
+//
+//    SDL_Event event;
+//
+//    const float deltaTime = 0.01f;
+//    float accumulator = 0.0f;
+//    float currentTime = utils::hireTimeInSeconds();
+//
+//    while(gameRunning)
+//    {
+//        float newTime = utils::hireTimeInSeconds();
+//        float frameTime = newTime - currentTime;
+//
+//        currentTime = newTime;
+//
+//        accumulator += frameTime;
+//
+//        while (accumulator >= deltaTime)
+//        {
+//            while(SDL_PollEvent(&event))
+//            {
+//                if (!(event.type == SDL_QUIT)) {
+//                    if (event.type == SDL_KEYDOWN) {
+//                        player.UpdatePosition(event);
+//                    }
+//                } else
+//                    gameRunning = false;
+//
+//            }
+//
+//            accumulator -= deltaTime;
+//        }
+//        if(frameDelay >= 1.0f)
+//        {
+//            fps = static_cast<int>(1.9f / frameTime);
+//            frameDelay -= 1.0f;
+//        }
+//
+//        window.clear();
+//        RenderTextures();
+//        SDL_Texture* test  = window.loadTexture("resources/Background.png");
+//        SDL_Rect dst;
+//        dst.x = 0;
+//        dst.y = 0;
+//        dst.h = 100;
+//        dst.w = 100;
+//        window.renderBackground(*test);
+//        window.display();
+//
+//    }
+//    window.cleanUp();
+//    SDL_Quit();
+//
+
 
 
     //build Entities
@@ -129,10 +131,10 @@ void LoadTextures(RenderWindow window)
 
 void InitEntities(SDL_Texture* textures[], RenderWindow* renderWindow)
 {
-    for (int i = 0; i < SDL_arraysize(floorTiles); ++i) {
-        floorTiles[i].Init(renderWindow, textures[2]);
-    }
-    player.Init(renderWindow, textures[1]);
+//    for (int i = 0; i < SDL_arraysize(floorTiles); ++i) {
+//        floorTiles[i].Init(renderWindow, textures[2]);
+//    }
+//    player.Init(renderWindow, textures[1]);
 
 
 
@@ -153,9 +155,9 @@ void InitEntities(SDL_Texture* textures[], RenderWindow* renderWindow)
 
 void RenderTextures()
 {
-    for (int i = 0; i < SDL_arraysize(floorTiles); ++i) {
-        floorTiles[i].RenderEntity();
-    }
+//    for (int i = 0; i < SDL_arraysize(floorTiles); ++i) {
+//        floorTiles[i].RenderEntity();
+//    }
 
 //    window.renderBackground(*entities[0].getTexture());
 //    window.renderEntity(entities[1]);

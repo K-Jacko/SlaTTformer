@@ -21,7 +21,7 @@ public:
     Vector2f position;
     SDL_Rect dst;
     SDL_Rect currentFrame;
-    SDL_Texture texture;
+    SDL_Texture* texture;
     Vector2f GetPosition();
     SDL_Texture* getTexture();
     SDL_Rect* getCurrentFrame();

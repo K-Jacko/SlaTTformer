@@ -10,14 +10,14 @@ FloorTile::FloorTile()
     currentFrame.h = 48;
     currentFrame.w = 48;
 }
-void FloorTile::Init(RenderWindow* renderWindow,SDL_Texture &texture)
-{
-    this->texture = texture;
-    this->window = renderWindow;
-    SetupCollider();
-}
-
-void FloorTile::RenderEntity()
-{
-    window->renderEntity(texture, &currentFrame,&dst);
-}
+//void FloorTile::Init(RenderWindow* renderWindow,SDL_Texture &texture)
+//{
+//    this->texture = texture;
+//    this->window = renderWindow;
+//    SetupCollider();
+//}
+//
+//void FloorTile::RenderEntity()
+//{
+//    window->renderEntity(texture, &currentFrame,&dst);
+//}
