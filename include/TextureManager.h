@@ -4,8 +4,7 @@
 
 #ifndef SLATFORMER_TEXTUREMANAGER_H
 #define SLATFORMER_TEXTUREMANAGER_H
-#include "Game.h"
-
+#include "SDL.h"
 
 class TextureManager {
 public:

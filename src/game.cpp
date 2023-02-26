@@ -1,8 +1,14 @@
 #include "Game.h"
+#include "ECS.h"
+#include "Components.h"
+
+Map* map;
+Manager manager;
 
  SDL_Renderer* Game::renderer = nullptr;
-Map* map;
- GameObject* player;
+SDL_Event Game::event;
+ auto& player(manager.addEntity());
+ auto& wall(manager.addEntity());
 
  Game::Game(){}
  Game::~Game(){}
@@ -54,7 +60,7 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
         std::cout << "Window :: Made " << SDL_GetError() << std::endl;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     if(renderer == nullptr)
     {
@@ -63,38 +69,49 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
     {
         std::cout << "Renderer :: Made " << SDL_GetError() << std::endl;
     }
-    Vector2f* position = new Vector2f(2,1);
-    player = new GameObject("resources/Character/_Idle.png", position);
+
     map = new Map();
     isRunning = true;
+
+    player.addComponent<TransformComponent>(300, 590,20,42,1);
+    player.addComponent<SpriteComponent>("resources/Character/_Idle.png", 45,42);
+    player.addComponent<ColliderComponent>("player");
+    player.addComponent<KeyboardComponent>();
+
+    wall.addComponent<TransformComponent>(320,527,100,100,1);
+    wall.addComponent<SpriteComponent>("resources/Tileset.png");
+    wall.addComponent<ColliderComponent>("wall");
+
 }
 
 void Game::HandleEvents()
 {
-    SDL_Event event;
+
     SDL_PollEvent(&event);
     switch (event.type) {
         case SDL_QUIT:
             isRunning = false;
-            break;
-        case SDL_KEYDOWN:
-            //Player Input
-            break;
-        default:
             break;
     }
 }
 
 void Game::Update()
 {
-    player->Update();
+    manager.Refresh();
+    manager.Update();
+
+    if(Collision::AABB(player.getComponent<ColliderComponent>().collider, wall.getComponent<ColliderComponent>().collider))
+    {
+        //player.getComponent<TransformComponent>().velocity * -1;
+        std::cout << player.getComponent<ColliderComponent>().tag << " Has hit " << wall.getComponent<ColliderComponent>().tag << std::endl;
+    }
 }
 
 void Game::Render()
 {
     SDL_RenderClear(renderer);
     map->DrawMap();
-    player->Render();
+    manager.Draw();
     SDL_RenderPresent(renderer);
 }
 

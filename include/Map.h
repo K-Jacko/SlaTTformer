@@ -11,16 +11,15 @@ class Map
 public:
     Map();
     ~Map();
-
-    void LoadMap(int arr[20][30]);
+    void LoadMap(int arr[16][27]);
     void DrawMap();
 
 private:
-
-    SDL_Rect src,dst;
-    int map[20][30];
+    SDL_Rect src,dst,bsrc,bdst,dsrc,ddst,wsrc,wdst;
+    int map[16][27];
     SDL_Texture* grass;
-    SDL_Texture* water;
-    SDL_Texture* dirt;
+    SDL_Texture* wall;
+    SDL_Texture* half;
+    SDL_Texture* background;
 };
 #endif //SLATFORMER_MAP_H

@@ -4,8 +4,8 @@
 #include "Math.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
-#include "GameObject.h"
 #include "TextureManager.h"
+#include "Collision.h"
 #include "Map.h"
 #include <iostream>
 class Game
@@ -20,6 +20,7 @@ public:
     void Clean();
     bool Running() { return isRunning;};
     static SDL_Renderer* renderer;
+    static SDL_Event event;
 
 private:
     int counter;

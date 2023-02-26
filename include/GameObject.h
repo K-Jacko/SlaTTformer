@@ -8,13 +8,13 @@
 class GameObject
 {
 public:
-    GameObject(const char* textureSheet, Vector2f* position);
-    ~GameObject();
+//    GameObject(const char* textureSheet, Vector2D* position);
+//    ~GameObject();
 
     void Update();
     void Render();
 private:
-    Vector2f position;
+    Vector2D position;
     SDL_Texture* objectTexture;
     SDL_Rect srcRect, dstRect;
 };

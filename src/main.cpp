@@ -4,11 +4,8 @@
 #include <SDL_ttf.h>
 #include <thread>
 #include "Game.h"
-#include "Entity.h"
 #include "RenderWindow.h"
-#include "Character.h"
 #include "Utils.h"
-#include "FloorTile.h"
 
 #define FLOORTILE_NUMBER = int 7
 
@@ -169,7 +166,7 @@ void RenderTextures()
 
 void HandleEntities(SDL_Texture* textures[])
 {
-    Entity entities[40];
+
 }
 
 void CreateCharacter()

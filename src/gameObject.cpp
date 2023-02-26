@@ -1,11 +1,11 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 
-GameObject::GameObject(const char *textureSheet, Vector2f* _position)
-:objectTexture(TextureManager::LoadTexture(textureSheet)), position(_position)
-{
-
-}
+//GameObject::GameObject(const char *textureSheet, Vector2f* _position)
+//:objectTexture(TextureManager::LoadTexture(textureSheet)), position(_position)
+//{
+//
+//}
 
 void GameObject::Update()
 {
