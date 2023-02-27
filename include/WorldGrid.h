@@ -1,8 +1,0 @@
-//
-// Created by Wake on 2/19/2023.
-//
-
-#ifndef SLATFORMER_WORLDGRID_H
-#define SLATFORMER_WORLDGRID_H
-
-#endif //SLATFORMER_WORLDGRID_H

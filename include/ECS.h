@@ -20,7 +20,6 @@ class Component {
 public:
     Entity* entity;
     Component(){}
-
     virtual void Init() {}
 
     virtual void Update() {}
@@ -28,6 +27,8 @@ public:
     virtual void Draw() {}
 
     virtual ~Component() = default;
+
+    virtual void Debug(){}
 
 };
 using ComponentID = std::size_t;
@@ -58,6 +59,10 @@ public:
     void Draw()
     {
         for(auto& c : components) c->Draw();
+    }
+    void Debug()
+    {
+        for(auto& c : components) c->Debug();
     }
     bool isActive() const { return active;}
     void destroy() { active = false; }
@@ -122,6 +127,11 @@ public:
         entities.emplace_back(std::move(uPtr));
         return *e;
     }
+
+    void Debug(){
+        for (auto& e : entities) e->Debug();
+    }
+
 private:
     std::vector<std::unique_ptr<Entity>> entities;
 };

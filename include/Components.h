@@ -6,8 +6,9 @@
 #define SLATFORMER_COMPONENTS_H
 #include "SpriteComponent.h"
 #include "TransformComponent.h"
-#include "KeyboardComponent.h"
 #include "ColliderComponent.h"
+#include "KeyboardComponent.h"
+
 
 class Spare;
 

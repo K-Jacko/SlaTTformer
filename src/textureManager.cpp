@@ -19,3 +19,8 @@ void TextureManager::Draw(SDL_Texture* texture, SDL_Rect src, SDL_Rect dst)
     SDL_RenderCopy(Game::renderer,texture,&src,&dst);
 }
 
+void TextureManager::DrawEx(SDL_Texture* texture, SDL_Rect src, SDL_Rect dst, SDL_RendererFlip flip)
+{
+    SDL_RenderCopyEx(Game::renderer, texture, &src, &dst, 0, nullptr, flip);
+}
+

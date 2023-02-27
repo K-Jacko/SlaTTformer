@@ -11,13 +11,16 @@
 class ColliderComponent : public Component
 {
 public:
-    ColliderComponent(std::string t)
+    ColliderComponent(std::string t, int xOff, int yOff)
     {
         tag = t;
+        xOffset = xOff;
+        yOffset = yOff;
     }
     ~ColliderComponent() override{}
     SDL_Rect collider;
     std::string tag;
+    int xOffset, yOffset;
 
     TransformComponent* transform;
 
@@ -33,10 +36,17 @@ public:
 
     void Update() override
     {
-        collider.x = static_cast<int>(transform->position.x);
-        collider.y = static_cast<int>(transform->position.y);
-        collider.w = static_cast<int>(transform->width * transform->scale);
-        collider.h = static_cast<int>(transform->height * transform->scale);
+        collider.x = static_cast<int>(transform->position.x) + (yOffset * transform->scale);
+        collider.y = static_cast<int>(transform->position.y) + (yOffset * transform->scale);
+        collider.w = static_cast<int>((transform->width - xOffset) * transform->scale) ;
+        collider.h = static_cast<int>((transform->height - yOffset) * transform->scale) ;
+    }
+
+    void Debug() override
+    {
+        if(Game::isDebug)
+            SDL_RenderDrawRect(Game::renderer,&collider);
+
     }
 };
 

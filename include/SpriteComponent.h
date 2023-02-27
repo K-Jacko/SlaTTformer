@@ -8,6 +8,8 @@
 #include "TextureManager.h"
 #include "Components.h"
 #include "SDL.h"
+#include "Animation.h"
+#include <map>
 
 
 
@@ -15,6 +17,10 @@ class SpriteComponent : public Component
 {
 
 public:
+    int frames, speed;
+    int animationIndex = 0;
+    std::map<const char*, Animation> animations;
+    SDL_RendererFlip flip;
     SpriteComponent() = default;
     ~SpriteComponent()
     {
@@ -31,10 +37,26 @@ public:
         srcRect.y = y;
     }
 
+    SpriteComponent(const char* path, bool t)
+    {
+
+        animated = t;
+        srcRect.x = srcRect.y = 0;
+
+        Animation idle = Animation(0,10,100);
+        Animation walk = Animation(1, 10, 100);
+        Animation attack = Animation(2,6,100);
+
+        animations.emplace("resources/Character/_Idle.png", idle);
+        animations.emplace("resources/Character/_Run.png", walk);
+        animations.emplace("resources/Character/_Attack2NoMovement.png", attack);
+
+        Play("resources/Character/_Idle.png");
+    }
+
     void SetTexture(const char* path)
     {
         texture = TextureManager::LoadTexture(path);
-        srcRect.x = srcRect.y = 0;
     }
 
     void Init() override
@@ -45,18 +67,34 @@ public:
     }
     void Update() override
     {
-        dstRect.x = (int)transform->position.x;
-        dstRect.y =  (int)transform->position.y;
+        if(animated)
+        {
+            srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+        }
+
+        dstRect.x = static_cast<int>(transform->position.x);
+        dstRect.y = static_cast<int>(transform->position.y);
         dstRect.w = transform->width * transform->scale;
         dstRect.h = transform->height * transform->scale;
+        animationIndex++;
     }
     void Draw() override
     {
-        TextureManager::Draw(texture, srcRect, dstRect);
+        TextureManager::DrawEx(texture, srcRect, dstRect, flip);
+    }
+
+    void Play(const char* animationName)
+    {
+        SetTexture(animationName);
+        frames = animations[animationName].frames;
+        speed = animations[animationName].speed;
+        animationIndex = animations[animationName].index;
     }
 private:
     TransformComponent* transform;
     SDL_Texture *texture;
     SDL_Rect srcRect, dstRect;
+
+    bool animated = false;
 };
 #endif //SLATFORMER_SPRITECOMPONENT_H

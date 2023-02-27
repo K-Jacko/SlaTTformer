@@ -7,18 +7,18 @@ Manager manager;
 
  SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
+bool Game::isDebug;
  auto& player(manager.addEntity());
  auto& wall(manager.addEntity());
 
  Game::Game(){}
- Game::~Game(){}
 void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth, bool fullscreen)
 {
 
     int flags = 0;
     if(fullscreen)
     {
-        flags = SDL_WINDOW_FULLSCREEN;
+        flags = SDL_WINDOW_BORDERLESS;
     }
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -73,14 +73,14 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
     map = new Map();
     isRunning = true;
 
-    player.addComponent<TransformComponent>(300, 590,20,42,1);
-    player.addComponent<SpriteComponent>("resources/Character/_Idle.png", 45,42);
-    player.addComponent<ColliderComponent>("player");
+    player.addComponent<TransformComponent>(0,523,120,84,2);
+    player.addComponent<SpriteComponent>("resources/Character/_Idle.png",true);
+    player.addComponent<ColliderComponent>("player",99,44);
     player.addComponent<KeyboardComponent>();
 
-    wall.addComponent<TransformComponent>(320,527,100,100,1);
-    wall.addComponent<SpriteComponent>("resources/Tileset.png");
-    wall.addComponent<ColliderComponent>("wall");
+    wall.addComponent<TransformComponent>(400,650,32,32,1);
+    wall.addComponent<SpriteComponent>("resources/Tileset.png",48,48);
+    wall.addComponent<ColliderComponent>("wall",0,0);
 
 }
 
@@ -92,6 +92,12 @@ void Game::HandleEvents()
         case SDL_QUIT:
             isRunning = false;
             break;
+        case SDL_KEYDOWN:
+            switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    isRunning = false;
+                    break;
+            }
     }
 }
 
@@ -102,7 +108,7 @@ void Game::Update()
 
     if(Collision::AABB(player.getComponent<ColliderComponent>().collider, wall.getComponent<ColliderComponent>().collider))
     {
-        //player.getComponent<TransformComponent>().velocity * -1;
+        player.getComponent<TransformComponent>().velocity * -1;
         std::cout << player.getComponent<ColliderComponent>().tag << " Has hit " << wall.getComponent<ColliderComponent>().tag << std::endl;
     }
 }
@@ -112,6 +118,7 @@ void Game::Render()
     SDL_RenderClear(renderer);
     map->DrawMap();
     manager.Draw();
+    manager.Debug();
     SDL_RenderPresent(renderer);
 }
 
@@ -122,3 +129,8 @@ void Game::Clean()
     SDL_Quit();
     std::cout << "Game Cleared" << std::endl;
 }
+
+Game::~Game()
+{
+     Game::Clean();
+ }
