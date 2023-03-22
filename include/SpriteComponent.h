@@ -80,7 +80,7 @@ public:
     }
     void Draw() override
     {
-        TextureManager::DrawEx(texture, srcRect, dstRect, flip);
+        TextureManager::Draw(texture, srcRect, dstRect);
     }
 
     void Play(const char* animationName)

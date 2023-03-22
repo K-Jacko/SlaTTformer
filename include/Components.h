@@ -8,7 +8,7 @@
 #include "TransformComponent.h"
 #include "ColliderComponent.h"
 #include "KeyboardComponent.h"
-
+#include "TileComponent.h"
 
 class Spare;
 

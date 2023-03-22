@@ -30,11 +30,7 @@ Map::Map()
 
     LoadMap(Level1);
 
-    //Grass
-    src.x = src.y = 0;
-    src.w = dst.w = 48;
-    src.h = dst.h = 48;
-    dst.x = dst.y = 0;
+
 
     //Background
     bsrc.x = 0;
@@ -46,21 +42,9 @@ Map::Map()
     bdst.w = 1280;
     bdst.h = 720;
 
-    //HalfBlock
-    dsrc.x = 48;
-    dsrc.y = 32;
-    ddst.x = ddst.y = 0;
-    dsrc.w = 32;
-    ddst.w = 48;
-    dsrc.h = ddst.h = 16;
 
-    //Wall
-    wsrc.x = 48;
-    wsrc.y = 48;
-    wdst.x = wdst.y = 0;
-    wsrc.w = 32;
-    wdst.w = 48;
-    wsrc.h = wdst.h = 46;
+
+
 
 }
 

@@ -16,6 +16,8 @@
 class Component;
 class Entity;
 
+class Manager;
+
 class Component {
 public:
     Entity* entity;
@@ -77,7 +79,7 @@ public:
     {
         T* c(new T(std::forward<TArgs>(mArgs)...));
         c->entity = this;
-        std::unique_ptr<Component> uPtr{c };
+        std::unique_ptr<Component> uPtr{c};
         components.emplace_back(std::move(uPtr));
 
         componentArray[getComponentTypeID<T>()] = c;

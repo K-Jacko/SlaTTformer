@@ -1,15 +1,22 @@
 #include "Game.h"
 #include "ECS.h"
 #include "Components.h"
+#include <vector>
 
 Map* map;
 Manager manager;
 
  SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
+
+std::vector<ColliderComponent*> Game::colliders;
+
 bool Game::isDebug;
  auto& player(manager.addEntity());
  auto& wall(manager.addEntity());
+ auto& tile0(manager.addEntity());
+ auto& tile1(manager.addEntity());
+ auto& tile2(manager.addEntity());
 
  Game::Game(){}
 void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth, bool fullscreen)
@@ -70,8 +77,17 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
         std::cout << "Renderer :: Made " << SDL_GetError() << std::endl;
     }
 
-    map = new Map();
+    //map = new Map();
     isRunning = true;
+
+    tile0.addComponent<TileComponent>(10,200,0);
+    tile0.addComponent<ColliderComponent>("Air");
+    tile1.addComponent<TileComponent>(200,200,1);
+    tile1.addComponent<ColliderComponent>("Air");
+    tile1.addComponent<TileComponent>(200,200,1);
+    tile1.addComponent<ColliderComponent>("Grass");
+    tile2.addComponent<TileComponent>(48,48,2);
+    tile2.addComponent<ColliderComponent>("Wall");
 
     player.addComponent<TransformComponent>(0,523,120,84,2);
     player.addComponent<SpriteComponent>("resources/Character/_Idle.png",true);
@@ -80,7 +96,7 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
 
     wall.addComponent<TransformComponent>(400,650,32,32,1);
     wall.addComponent<SpriteComponent>("resources/Tileset.png",48,48);
-    wall.addComponent<ColliderComponent>("wall",0,0);
+    wall.addComponent<ColliderComponent>("wall");
 
 }
 
@@ -108,7 +124,8 @@ void Game::Update()
 
     if(Collision::AABB(player.getComponent<ColliderComponent>().collider, wall.getComponent<ColliderComponent>().collider))
     {
-        player.getComponent<TransformComponent>().velocity * -1;
+        player.getComponent<TransformComponent>().velocity.Zero();
+        player.getComponent<TransformComponent>().position.x -= 1;
         std::cout << player.getComponent<ColliderComponent>().tag << " Has hit " << wall.getComponent<ColliderComponent>().tag << std::endl;
     }
 }
@@ -116,7 +133,7 @@ void Game::Update()
 void Game::Render()
 {
     SDL_RenderClear(renderer);
-    map->DrawMap();
+    //map->DrawMap();
     manager.Draw();
     manager.Debug();
     SDL_RenderPresent(renderer);

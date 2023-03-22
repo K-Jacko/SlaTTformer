@@ -4,7 +4,6 @@
 
 #ifndef SLATFORMER_POSITION_H
 #define SLATFORMER_POSITION_H
-#include "Components.h"
 #include "ECS.h"
 #include "Math.h"
 

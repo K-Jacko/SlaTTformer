@@ -1,6 +1,7 @@
 #ifndef SLATFORMER_GAME_H
 #define SLATFORMER_GAME_H
 #include "SDL.h"
+#include <vector>
 #include "Math.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
@@ -8,6 +9,10 @@
 #include "Collision.h"
 #include "Map.h"
 #include <iostream>
+
+
+class ColliderComponent;
+
 class Game
 {
 public:
@@ -22,7 +27,7 @@ public:
     static SDL_Renderer* renderer;
     static SDL_Event event;
     static bool isDebug;
-
+    static std::vector<ColliderComponent*> colliders;
 
 private:
     int counter;

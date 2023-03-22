@@ -13,14 +13,12 @@ class KeyboardComponent : public Component
 public:
     TransformComponent *transform;
     SpriteComponent *spriteComponent;
-    ColliderComponent* colliderComponent;
     bool cnt = false;
 
     void Init() override
     {
         transform = &entity->getComponent<TransformComponent>();
         spriteComponent = &entity->getComponent<SpriteComponent>();
-        colliderComponent = &entity->getComponent<ColliderComponent>();
     }
 
     void Update() override

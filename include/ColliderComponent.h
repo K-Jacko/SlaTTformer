@@ -4,9 +4,11 @@
 
 #ifndef SLATFORMER_COLLIDERCOMPONENT_H
 #define SLATFORMER_COLLIDERCOMPONENT_H
-#include "SDL.h"
-#include "Components.h"
 #include <string>
+#include "SDL.h"
+#include "TransformComponent.h"
+#include "ECS.h"
+#include "Game.h"
 
 class ColliderComponent : public Component
 {
@@ -16,6 +18,12 @@ public:
         tag = t;
         xOffset = xOff;
         yOffset = yOff;
+    }
+    ColliderComponent(std::string t)
+    {
+        tag = t;
+        xOffset = 0;
+        yOffset = 0;
     }
     ~ColliderComponent() override{}
     SDL_Rect collider;
@@ -32,6 +40,8 @@ public:
         }
 
         transform = &entity->getComponent<TransformComponent>();
+
+        Game::colliders.push_back(this);
     }
 
     void Update() override
