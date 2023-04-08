@@ -10,13 +10,13 @@ Manager manager;
 SDL_Event Game::event;
 
 std::vector<ColliderComponent*> Game::colliders;
+float Game::deltaTime;
 
 bool Game::isDebug;
+auto& background(manager.addEntity());
  auto& player(manager.addEntity());
  auto& wall(manager.addEntity());
- auto& tile0(manager.addEntity());
- auto& tile1(manager.addEntity());
- auto& tile2(manager.addEntity());
+
 
  Game::Game(){}
 void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth, bool fullscreen)
@@ -57,7 +57,7 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
         std::cout << "Text :: Systems Initialised!" << std::endl;
     }
 
-    window = SDL_CreateWindow(title, sxPos, syPos, sWidth, sHeight, SDL_WINDOW_SHOWN | flags);
+    window = SDL_CreateWindow(title, sxPos, syPos, sWidth, sHeight, SDL_WINDOW_SHOWN);
 
     if(window == nullptr)
     {
@@ -80,24 +80,20 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
     //map = new Map();
     isRunning = true;
 
-    tile0.addComponent<TileComponent>(10,200,0);
-    tile0.addComponent<ColliderComponent>("Air");
-    tile1.addComponent<TileComponent>(200,200,1);
-    tile1.addComponent<ColliderComponent>("Air");
-    tile1.addComponent<TileComponent>(200,200,1);
-    tile1.addComponent<ColliderComponent>("Grass");
-    tile2.addComponent<TileComponent>(48,48,2);
-    tile2.addComponent<ColliderComponent>("Wall");
+    Map::LoadMap("resources/Map1.map",52,1);
+    //Map::LoadWalls(400,650, 20,10);
 
-    player.addComponent<TransformComponent>(0,523,120,84,2);
+    player.addComponent<TransformComponent>(0,500,120,84,2,1);
     player.addComponent<SpriteComponent>("resources/Character/_Idle.png",true);
     player.addComponent<ColliderComponent>("player",99,44);
     player.addComponent<KeyboardComponent>();
 
+    background.addComponent<TransformComponent>(0,0,1280,720,1,0);
+    background.addComponent<SpriteComponent>("resources/Background.png",100,100);
+
     wall.addComponent<TransformComponent>(400,650,32,32,1);
     wall.addComponent<SpriteComponent>("resources/Tileset.png",48,48);
-    wall.addComponent<ColliderComponent>("wall");
-
+    wall.addComponent<ColliderComponent>("wall",true);
 }
 
 void Game::HandleEvents()
@@ -122,11 +118,10 @@ void Game::Update()
     manager.Refresh();
     manager.Update();
 
-    if(Collision::AABB(player.getComponent<ColliderComponent>().collider, wall.getComponent<ColliderComponent>().collider))
+    for (auto& cc : colliders)
     {
-        player.getComponent<TransformComponent>().velocity.Zero();
-        player.getComponent<TransformComponent>().position.x -= 1;
-        std::cout << player.getComponent<ColliderComponent>().tag << " Has hit " << wall.getComponent<ColliderComponent>().tag << std::endl;
+        //Collision::AABB(player.getComponent<ColliderComponent>() , *cc);
+        Collision::AABB(player.getComponent<ColliderComponent>(), *cc,player.getComponent<TransformComponent>().velocity,cc->transform->velocity);
     }
 }
 
@@ -150,4 +145,22 @@ void Game::Clean()
 Game::~Game()
 {
      Game::Clean();
- }
+}
+
+void Game::AddTile(int id, int x, int y)
+{
+    auto& tile(manager.addEntity());
+    tile.addComponent<TileComponent>(x,700,id);
+    if(id == 1)
+        tile.addComponent<ColliderComponent>("Grass",true);
+
+
+}
+
+void Game::CreateWalls(int x, int y)
+{
+    auto& wall(manager.addEntity());
+    wall.addComponent<TransformComponent>(x,y,32,32,1);
+    wall.addComponent<SpriteComponent>("resources/Tileset.png",48,48);
+    wall.addComponent<ColliderComponent>("wall", true);
+}

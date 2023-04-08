@@ -13,24 +13,26 @@
 class ColliderComponent : public Component
 {
 public:
+    SDL_Rect collider;
+    std::string tag;
+    int xOffset, yOffset;
+    TransformComponent* transform;
+    bool collidesWithPlayer = false;
+
     ColliderComponent(std::string t, int xOff, int yOff)
     {
         tag = t;
         xOffset = xOff;
         yOffset = yOff;
     }
-    ColliderComponent(std::string t)
+    ColliderComponent(std::string t, bool cwp)
     {
         tag = t;
         xOffset = 0;
         yOffset = 0;
+        collidesWithPlayer = cwp;
     }
     ~ColliderComponent() override{}
-    SDL_Rect collider;
-    std::string tag;
-    int xOffset, yOffset;
-
-    TransformComponent* transform;
 
     void Init() override
     {

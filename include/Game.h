@@ -24,6 +24,9 @@ public:
     void Render();
     void Clean();
     bool Running() { return isRunning;};
+    static float deltaTime;
+    static void AddTile(int id, int x, int y);
+    static void CreateWalls(int x, int y);
     static SDL_Renderer* renderer;
     static SDL_Event event;
     static bool isDebug;

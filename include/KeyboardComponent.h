@@ -38,18 +38,23 @@ public:
         {
             switch (Game::event.key.keysym.sym) {
                 case SDLK_w:
-                    transform->velocity.y = -1;
+                    transform->velocity.y = -2;
+                    transform->kinematic = 1;
                     break;
                 case SDLK_s:
-                    transform->velocity.y = 1;
+                    transform->velocity.y = 0;
+                    transform->kinematic = 0;
+                    spriteComponent->Play("resources/Character/_Crouch.png");
                     break;
                 case SDLK_a:
                     transform->velocity.x = -1;
+                    transform->kinematic = 1;
                     spriteComponent->Play("resources/Character/_Run.png");
                     spriteComponent->flip = SDL_FLIP_HORIZONTAL;
                     break;
                 case SDLK_d:
                     transform->velocity.x = 1;
+                    transform->kinematic = 1;
                     spriteComponent->Play("resources/Character/_Run.png");
                     spriteComponent->flip = SDL_FLIP_NONE;
                     break;
@@ -65,9 +70,11 @@ public:
             switch (Game::event.key.keysym.sym) {
                 case SDLK_w:
                     transform->velocity.y = 0;
+                    spriteComponent->Play("resources/Character/_Idle.png");
                     break;
                 case SDLK_s:
                     transform->velocity.y = 0;
+                    spriteComponent->Play("resources/Character/_Idle.png");
                     break;
                 case SDLK_a:
                     transform->velocity.x = 0;

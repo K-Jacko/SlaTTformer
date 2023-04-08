@@ -4,22 +4,17 @@
 
 #ifndef SLATFORMER_MAP_H
 #define SLATFORMER_MAP_H
-#include "Game.h"
+#include <iostream>
 
 class Map
 {
 public:
     Map();
     ~Map();
-    void LoadMap(int arr[16][27]);
-    void DrawMap();
+    static void LoadMap(std::string path, int sizex, int sizey);
+    static void LoadWalls(int xPos, int yPos, int xSize, int ySize);
 
 private:
-    SDL_Rect src,dst,bsrc,bdst,dsrc,ddst,wsrc,wdst;
-    int map[16][27];
-    SDL_Texture* grass;
-    SDL_Texture* wall;
-    SDL_Texture* half;
-    SDL_Texture* background;
+
 };
 #endif //SLATFORMER_MAP_H

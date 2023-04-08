@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include "Game.h"
+#include <chrono>
 #define FLOORTILE_NUMBER = int 7
 
 
@@ -18,11 +19,16 @@ int main(int argc, char* args[])
     Uint32 frameStart;
     int frameTime;
 
+    auto lastTime = std::chrono::high_resolution_clock::now();
+
     game = new Game();
     game->Init("Cozy",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,720,1280, true);
     while (game->Running())
     {
         frameStart = SDL_GetTicks();
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        game->deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - lastTime).count();
+        lastTime = currentTime;
 
         game->HandleEvents();
         game->Update();

@@ -6,21 +6,28 @@
 #define SLATFORMER_POSITION_H
 #include "ECS.h"
 #include "Math.h"
+#include "Game.h"
 
 struct TransformComponent : public Component
 {
 public:
     Vector2D position;
-    Vector2D velocity;
+    Vector2D velocity = Vector2D(0,0);
+    float mass = 1;
 
     int height, width = 80;
     int scale = 1;
 
-    int speed = 2;
+    float speed = 500;
+
+    int kinematic = 0;
+
+
 
     ~TransformComponent() override
     {
-        speed = 0;
+        speed = 0.0;
+        velocity.Zero();
     }
 
     TransformComponent()
@@ -42,6 +49,16 @@ public:
         height = h;
         scale = s;
     }
+    TransformComponent(float x, float y, float w, float h, float s, int k)
+    :kinematic(k)
+    {
+        position.x = x;
+        position.y = y;
+        width = w;
+        height = h;
+        scale = s;
+        velocity = Vector2D(0.0f,0.0f);
+    }
 
     void Init() override
     {
@@ -50,10 +67,20 @@ public:
 
     void Update() override
     {
-        position.x += velocity.x * speed;
-        position.y += velocity.y * speed;
-        //std::cout << velocity << std::endl;
+        position.x += velocity.x * speed * Game::deltaTime;
+        position.y += velocity.y * speed * Game::deltaTime;
+        if(kinematic == 1)
+        {
+            Gravity();
+        }
+        //std::cout << velocity << "  " << speed << std::endl;
     }
+
+    void Gravity()
+    {
+        velocity.y += 9.81f * mass * Game::deltaTime;
+    }
+
 
 };
 #endif //SLATFORMER_POSITION_H

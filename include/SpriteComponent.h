@@ -46,10 +46,12 @@ public:
         Animation idle = Animation(0,10,100);
         Animation walk = Animation(1, 10, 100);
         Animation attack = Animation(2,6,100);
+        Animation crouch = Animation(3,1,100);
 
         animations.emplace("resources/Character/_Idle.png", idle);
         animations.emplace("resources/Character/_Run.png", walk);
         animations.emplace("resources/Character/_Attack2NoMovement.png", attack);
+        animations.emplace("resources/Character/_Crouch.png", crouch);
 
         Play("resources/Character/_Idle.png");
     }
@@ -89,6 +91,11 @@ public:
         frames = animations[animationName].frames;
         speed = animations[animationName].speed;
         animationIndex = animations[animationName].index;
+    }
+
+    void Stop(const char* animationName)
+    {
+
     }
 private:
     TransformComponent* transform;

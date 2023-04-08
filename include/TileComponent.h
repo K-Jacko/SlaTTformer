@@ -3,6 +3,7 @@
 #include "ECS.h"
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
+#include "TextureManager.h"
 #include "SDL.h"
 
 class TileComponent : public Component
@@ -20,27 +21,29 @@ public:
     };
     TileComponent(int x, int y, int id)
     {
-        tileRect.x = x;
-        tileRect.y = y;
-
+        path = nullptr;
         tileID = id;
 
         switch (tileID) {
             case 0:
                 path = "resources/Tileset.png";
                 //Air
-                tileRect.w = 10;
-                tileRect.h = 10;
+                srcRect.x = srcRect.y = 700;
+                srcRect.w = dstRect.w = 48;
+                srcRect.h = dstRect.h = 48;
+                dstRect.x = x;
+                dstRect.y = y;
                 break;
             case 1:
                 path = "resources/Tileset2.png";
                 //Grass
-                tileRect.w = 32;
-                tileRect.h = 32;
-//                src.x = src.y = 0;
-//                src.w = dst.w = 48;
-//                src.h = dst.h = 48;
-//                dst.x = dst.y = 0;
+//                srcRect.w = 32;
+//                srcRect.h = 32;
+                srcRect.x = srcRect.y = 0;
+                srcRect.w = dstRect.w = 48;
+                srcRect.h = dstRect.h = 48;
+                dstRect.x = x;
+                dstRect.y = y;
                 break;
             case 2:
                 path = "resources/Tileset.png";
@@ -68,13 +71,31 @@ public:
 
     void Init() override
     {
-        entity->addComponent<TransformComponent>((float)tileRect.x,(float)tileRect.y,tileRect.w,tileRect.h,1);
+        entity->addComponent<TransformComponent>((float)dstRect.x,(float)dstRect.y,srcRect.w,srcRect.h,1);
+        transform = &entity->getComponent<TransformComponent>();
 
-        entity->addComponent<SpriteComponent>(path);
+        texture = TextureManager::LoadTexture(path);
+
+    }
+
+    void Update() override
+    {
+        dstRect.x = static_cast<int>(transform->position.x);
+        dstRect.y = static_cast<int>(transform->position.y);
+        dstRect.w = transform->width * transform->scale;
+        dstRect.h = transform->height * transform->scale;
+    }
+
+    void Draw() override
+    {
+        TextureManager::Draw(texture, srcRect, dstRect);
     }
 
 private:
-
+    TransformComponent* transform;
+    SpriteComponent* sprite;
+    SDL_Texture* texture;
+    SDL_Rect srcRect, dstRect;
 };
 
 #endif //SLATFORMER_TILECOMPONENT_H
