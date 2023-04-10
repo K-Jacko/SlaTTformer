@@ -16,6 +16,7 @@ struct Vector2D
     Vector2D& Multiply(const Vector2D& vec);
     Vector2D& Divide(const Vector2D& vec);
 
+
     friend Vector2D& operator*(Vector2D& v1, const Vector2D& v2);
     friend Vector2D& operator-(Vector2D& v1, const Vector2D& v2);
     friend Vector2D& operator+(Vector2D& v1, const Vector2D& v2);
@@ -25,37 +26,15 @@ struct Vector2D
     Vector2D& operator-=(const Vector2D& vec);
     Vector2D& operator*=(const Vector2D& vec);
     Vector2D& operator/=(const Vector2D& vec);
+    Vector2D& operator*=(float i);
+
+    Vector2D& operator*(const float& i);
 
     Vector2D& operator*(const int& i);
+    //Vector2D& operator*(const float & i);
     Vector2D& Zero();
 
-    friend std::ostream& operator<<(std::ostream& stream, const Vector2D vec);
-};
-struct IntVector2D
-{
-    IntVector2D();
-    IntVector2D(int _x, int _y);
-    int x, y;
-
-    IntVector2D& Add(const IntVector2D& vec);
-    IntVector2D& Subtract(const IntVector2D& vec);
-    IntVector2D& Multiply(const IntVector2D& vec);
-    IntVector2D& Divide(const IntVector2D& vec);
-
-    friend IntVector2D& operator*(IntVector2D& v1, const IntVector2D& v2);
-    friend IntVector2D& operator-(IntVector2D& v1, const IntVector2D& v2);
-    friend IntVector2D& operator+(IntVector2D& v1, const IntVector2D& v2);
-    friend IntVector2D& operator/(IntVector2D& v1, const IntVector2D& v2);
-
-    IntVector2D& operator+=(const IntVector2D& vec);
-    IntVector2D& operator-=(const IntVector2D& vec);
-    IntVector2D& operator*=(const IntVector2D& vec);
-    IntVector2D& operator/=(const IntVector2D& vec);
-
-    IntVector2D& operator*(const int& i);
-    IntVector2D& Zero();
-
-    friend std::ostream& operator<<(std::ostream& stream, const IntVector2D vec);
+    friend std::ostream& operator<<(std::ostream& stream, Vector2D vec);
 };
 
 struct Vector4f

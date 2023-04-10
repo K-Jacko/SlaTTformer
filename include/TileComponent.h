@@ -72,6 +72,10 @@ public:
     void Init() override
     {
         entity->addComponent<TransformComponent>((float)dstRect.x,(float)dstRect.y,srcRect.w,srcRect.h,1);
+        if(!entity->hasComponent<TransformComponent>())
+        {
+            entity->addComponent<TransformComponent>();
+        }
         transform = &entity->getComponent<TransformComponent>();
 
         texture = TextureManager::LoadTexture(path);

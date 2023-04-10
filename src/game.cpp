@@ -56,6 +56,14 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
     {
         std::cout << "Text :: Systems Initialised!" << std::endl;
     }
+    if (__cplusplus == 202101L) std::cout << "C++23";
+    else if (__cplusplus == 202002L) std::cout << "C++20";
+    else if (__cplusplus == 201703L) std::cout << "C++17";
+    else if (__cplusplus == 201402L) std::cout << "C++14";
+    else if (__cplusplus == 201103L) std::cout << "C++11";
+    else if (__cplusplus == 199711L) std::cout << "C++98";
+    else std::cout << "pre-standard C++." << __cplusplus;
+    std::cout << "\n";
 
     window = SDL_CreateWindow(title, sxPos, syPos, sWidth, sHeight, SDL_WINDOW_SHOWN);
 
@@ -83,7 +91,7 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
     Map::LoadMap("resources/Map1.map",52,1);
     //Map::LoadWalls(400,650, 20,10);
 
-    player.addComponent<TransformComponent>(0,500,120,84,2,1);
+    player.addComponent<TransformComponent>(1,500,120,84,2,1);
     player.addComponent<SpriteComponent>("resources/Character/_Idle.png",true);
     player.addComponent<ColliderComponent>("player",99,44);
     player.addComponent<KeyboardComponent>();

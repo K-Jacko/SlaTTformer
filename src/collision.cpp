@@ -29,20 +29,23 @@ CollisionResult Collision::AABB(const ColliderComponent& colA, const ColliderCom
 
         if (std::abs(dx1) < std::abs(dx2) && std::abs(dx1) < std::abs(dy1) && std::abs(dx1) < std::abs(dy2)) {
             colA.transform->position.x -= 1;
+            colA.transform->velocity.Zero();
             result.direction = CollisionDirection::Left;
             std::cout << "Left" << colB.tag << std::endl;
         } else if (std::abs(dx2) < std::abs(dx1) && std::abs(dx2) < std::abs(dy1) && std::abs(dx2) < std::abs(dy2)) {
             colA.transform->position.x += 1;
+            colA.transform->velocity.Zero();
             result.direction = CollisionDirection::Right;
             std::cout << "Right" << colB.tag << std::endl;
         } else if (std::abs(dy1) < std::abs(dy2)) {
-            colA.transform->position.y -= 1;
+            colA.transform->position.y -= 1.9f;
+            //colA.transform->velocity.Zero();
             result.direction = CollisionDirection::Up;
-            colA.transform->kinematic = 0;
-            colA.transform->velocity.y = 0;
+            //colA.transform->kinematic = 0;
             std::cout << "Up" << colB.tag << std::endl;
         } else {
             colA.transform->position.y += 1;
+            colA.transform->velocity.Zero();
             result.direction = CollisionDirection::Down;
             std::cout << "Down" << colB.tag << std::endl;
         }

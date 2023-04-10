@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include "Game.h"
-#include <chrono>
+#include <windows.h>
 #define FLOORTILE_NUMBER = int 7
 
 
@@ -10,36 +10,60 @@
 //Character player;
 
 Game* game = nullptr;
+LARGE_INTEGER frequency;
+float get_seconds_per_frame(LARGE_INTEGER start_counter,
+                            LARGE_INTEGER end_counter)
+{
+
+    return ((float)(end_counter.QuadPart - start_counter.QuadPart) / (float)frequency.QuadPart);
+}
 
 int main(int argc, char* args[])
 {
-    const int fps = 60;
-    const int frameDelay = 1000 / fps;
 
-    Uint32 frameStart;
-    int frameTime;
+    LARGE_INTEGER start_counter, end_counter, counts, fps, ms;
+    float target_seconds_per_frame = 1.0f / 120.0f;
+    QueryPerformanceCounter(&start_counter);
+    QueryPerformanceFrequency(&frequency);
 
-    auto lastTime = std::chrono::high_resolution_clock::now();
 
     game = new Game();
     game->Init("Cozy",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,720,1280, true);
     while (game->Running())
     {
-        frameStart = SDL_GetTicks();
-        auto currentTime = std::chrono::high_resolution_clock::now();
-        game->deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - lastTime).count();
-        lastTime = currentTime;
+        QueryPerformanceCounter(&end_counter);
+
+        float seconds_per_frame = get_seconds_per_frame(start_counter,end_counter);
+
+        if(seconds_per_frame < target_seconds_per_frame)
+        {
+            DWORD sleep_ms;
+
+            sleep_ms = (DWORD)(1000 * (target_seconds_per_frame - seconds_per_frame));
+
+            Sleep(sleep_ms);
+
+            while(seconds_per_frame < target_seconds_per_frame)
+            {
+                QueryPerformanceCounter(&end_counter);
+
+                seconds_per_frame = get_seconds_per_frame(start_counter,
+                                                          end_counter);
+            }
+        }
+
+        QueryPerformanceCounter(&end_counter);
+
+        seconds_per_frame = get_seconds_per_frame(start_counter,
+                                                  end_counter);
+
+        start_counter = end_counter;
+
+        game->deltaTime = seconds_per_frame;
 
         game->HandleEvents();
         game->Update();
         game->Render();
-
-        frameStart = SDL_GetTicks() - frameStart;
-
-        if(frameDelay > frameTime)
-        {
-            SDL_Delay(frameDelay - frameStart);
-        }
     }
     game->Clean();
     return 0;

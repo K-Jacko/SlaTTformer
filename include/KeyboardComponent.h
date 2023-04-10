@@ -13,11 +13,18 @@ class KeyboardComponent : public Component
 public:
     TransformComponent *transform;
     SpriteComponent *spriteComponent;
-    bool cnt = false;
 
     void Init() override
     {
+        if(!entity->hasComponent<TransformComponent>())
+        {
+            entity->addComponent<TransformComponent>();
+        }
         transform = &entity->getComponent<TransformComponent>();
+        if(!entity->hasComponent<SpriteComponent>())
+        {
+            entity->addComponent<SpriteComponent>();
+        }
         spriteComponent = &entity->getComponent<SpriteComponent>();
     }
 
@@ -25,35 +32,29 @@ public:
     {
         if(Game::event.type == SDL_MOUSEBUTTONDOWN)
         {
-            if(!cnt)
-            {
-                cnt = true;
-            }
         } else if(Game::event.type == SDL_MOUSEBUTTONUP)
         {
-            spriteComponent->Play("resources/Character/_Idle.png");
-            cnt = false;
         }
         if(Game::event.type == SDL_KEYDOWN)
         {
             switch (Game::event.key.keysym.sym) {
                 case SDLK_w:
-                    transform->velocity.y = -2;
+                    transform->acceleration.y = -0.8;
                     transform->kinematic = 1;
                     break;
                 case SDLK_s:
-                    transform->velocity.y = 0;
+                    transform->acceleration.y = 0;
                     transform->kinematic = 0;
                     spriteComponent->Play("resources/Character/_Crouch.png");
                     break;
                 case SDLK_a:
-                    transform->velocity.x = -1;
+                    transform->acceleration.x = -0.6;
                     transform->kinematic = 1;
                     spriteComponent->Play("resources/Character/_Run.png");
                     spriteComponent->flip = SDL_FLIP_HORIZONTAL;
                     break;
                 case SDLK_d:
-                    transform->velocity.x = 1;
+                    transform->acceleration.x = 0.6;
                     transform->kinematic = 1;
                     spriteComponent->Play("resources/Character/_Run.png");
                     spriteComponent->flip = SDL_FLIP_NONE;
@@ -65,24 +66,23 @@ public:
                     Game::isDebug = true;
             }
         }
+        else{
+            transform->acceleration.x = 0;
+        }
         if(Game::event.type == SDL_KEYUP)
         {
             switch (Game::event.key.keysym.sym) {
                 case SDLK_w:
                     transform->velocity.y = 0;
-                    spriteComponent->Play("resources/Character/_Idle.png");
                     break;
                 case SDLK_s:
                     transform->velocity.y = 0;
-                    spriteComponent->Play("resources/Character/_Idle.png");
                     break;
                 case SDLK_a:
                     transform->velocity.x = 0;
-                    spriteComponent->Play("resources/Character/_Idle.png");
                     break;
                 case SDLK_d:
                     transform->velocity.x = 0;
-                    spriteComponent->Play("resources/Character/_Idle.png");
                     break;
                 case SDLK_e:
                     spriteComponent->Play("resources/Character/_Idle.png");
@@ -92,6 +92,8 @@ public:
 
             }
         }
+        if(transform->velocity.x < 0.05f || transform->velocity.x < -0.5f)
+            spriteComponent->Stop();
     }
 };
 

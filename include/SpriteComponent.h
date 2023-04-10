@@ -63,6 +63,10 @@ public:
 
     void Init() override
     {
+        if(!entity->hasComponent<TransformComponent>())
+        {
+            entity->addComponent<TransformComponent>();
+        }
         transform = &entity->getComponent<TransformComponent>();
         srcRect.w = transform->width;
         srcRect.h = transform->height;
@@ -93,9 +97,9 @@ public:
         animationIndex = animations[animationName].index;
     }
 
-    void Stop(const char* animationName)
+    void Stop()
     {
-
+        Play("resources/Character/_Idle.png");
     }
 private:
     TransformComponent* transform;
