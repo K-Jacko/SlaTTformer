@@ -1,28 +1,32 @@
 #include "Game.h"
 #include "ECS.h"
 #include "Components.h"
-#include <vector>
+#include "Math.h"
 
 Map* map;
 Manager manager;
 
- SDL_Renderer* Game::renderer = nullptr;
+SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
-
+Vector2D Game::mousePosition;
+int Game::WindowX;
+int Game::WindowY;
+int Game::GridSize;
 std::vector<ColliderComponent*> Game::colliders;
 float Game::deltaTime;
 
 bool Game::isDebug;
-auto& background(manager.addEntity());
+auto& Director(manager.addEntity());
  auto& player(manager.addEntity());
  auto& wall(manager.addEntity());
-
 
  Game::Game(){}
 void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth, bool fullscreen)
 {
-
     int flags = 0;
+    WindowX = sWidth;
+    WindowY = sHeight;
+    GridSize = 25;
     if(fullscreen)
     {
         flags = SDL_WINDOW_BORDERLESS;
@@ -56,14 +60,6 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
     {
         std::cout << "Text :: Systems Initialised!" << std::endl;
     }
-    if (__cplusplus == 202101L) std::cout << "C++23";
-    else if (__cplusplus == 202002L) std::cout << "C++20";
-    else if (__cplusplus == 201703L) std::cout << "C++17";
-    else if (__cplusplus == 201402L) std::cout << "C++14";
-    else if (__cplusplus == 201103L) std::cout << "C++11";
-    else if (__cplusplus == 199711L) std::cout << "C++98";
-    else std::cout << "pre-standard C++." << __cplusplus;
-    std::cout << "\n";
 
     window = SDL_CreateWindow(title, sxPos, syPos, sWidth, sHeight, SDL_WINDOW_SHOWN);
 
@@ -88,21 +84,27 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
     //map = new Map();
     isRunning = true;
 
-    Map::LoadMap("resources/Map1.map",52,1);
+
+
+    Map::LoadMap("resources/Map1.map",WindowX ,WindowY ,GridSize);
     //Map::LoadWalls(400,650, 20,10);
 
-    player.addComponent<TransformComponent>(1,500,120,84,2,1);
-    player.addComponent<SpriteComponent>("resources/Character/_Idle.png",true);
-    player.addComponent<ColliderComponent>("player",99,44);
+    player.addComponent<TransformComponent>(WindowX / 2 - 120, WindowY - 220 ,GridSize, GridSize * 2 ,2,0);
+    player.addComponent<SpriteComponent>("resources/Character/_Idle.png", 44 , 42, true);
+    player.addComponent<ColliderComponent>("player");
     player.addComponent<KeyboardComponent>();
 
-    background.addComponent<TransformComponent>(0,0,1280,720,1,0);
-    background.addComponent<SpriteComponent>("resources/Background.png",100,100);
+    Director.addComponent<TransformComponent>(0, 0, WindowX, WindowY, 1, 0);
+    Director.addComponent<SpriteComponent>("resources/Background.png", 100, 100);
+    Director.addComponent<GridComponent>(WindowX / GridSize - 1, WindowY / GridSize, GridSize);
+    Director.addComponent<MouseComponent>();
+    Director.addComponent<StateMachineComponent>();
 
-    wall.addComponent<TransformComponent>(400,650,32,32,1);
-    wall.addComponent<SpriteComponent>("resources/Tileset.png",48,48);
-    wall.addComponent<ColliderComponent>("wall",true);
+
+
 }
+
+
 
 void Game::HandleEvents()
 {
@@ -158,7 +160,7 @@ Game::~Game()
 void Game::AddTile(int id, int x, int y)
 {
     auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(x,700,id);
+    tile.addComponent<TileComponent>(x,y,id);
     if(id == 1)
         tile.addComponent<ColliderComponent>("Grass",true);
 

@@ -30,17 +30,10 @@ public:
 
     void Update() override
     {
-        if(Game::event.type == SDL_MOUSEBUTTONDOWN)
-        {
-        } else if(Game::event.type == SDL_MOUSEBUTTONUP)
-        {
-        }
         if(Game::event.type == SDL_KEYDOWN)
         {
             switch (Game::event.key.keysym.sym) {
                 case SDLK_w:
-                    transform->acceleration.y = -0.8;
-                    transform->kinematic = 1;
                     break;
                 case SDLK_s:
                     transform->acceleration.y = 0;
@@ -60,14 +53,13 @@ public:
                     spriteComponent->flip = SDL_FLIP_NONE;
                     break;
                 case SDLK_e:
-                    spriteComponent->Play("resources/Character/_Attack2NoMovement.png");
                     break;
                 case SDLK_SPACE:
                     Game::isDebug = true;
             }
         }
         else{
-            transform->acceleration.x = 0;
+            transform->acceleration.Zero();
         }
         if(Game::event.type == SDL_KEYUP)
         {
@@ -76,24 +68,24 @@ public:
                     transform->velocity.y = 0;
                     break;
                 case SDLK_s:
+                    spriteComponent->Play("resources/Character/_Idle.png");
                     transform->velocity.y = 0;
                     break;
                 case SDLK_a:
+                    spriteComponent->Play("resources/Character/_Idle.png");
                     transform->velocity.x = 0;
                     break;
                 case SDLK_d:
                     transform->velocity.x = 0;
+                    spriteComponent->Play("resources/Character/_Idle.png");
                     break;
                 case SDLK_e:
                     spriteComponent->Play("resources/Character/_Idle.png");
                 case SDLK_SPACE:
                     Game::isDebug = false;
                     break;
-
             }
         }
-        if(transform->velocity.x < 0.05f || transform->velocity.x < -0.5f)
-            spriteComponent->Stop();
     }
 };
 

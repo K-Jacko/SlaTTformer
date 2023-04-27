@@ -40,8 +40,8 @@ public:
 //                srcRect.w = 32;
 //                srcRect.h = 32;
                 srcRect.x = srcRect.y = 0;
-                srcRect.w = dstRect.w = 48;
-                srcRect.h = dstRect.h = 48;
+                srcRect.w = dstRect.w = 25;
+                srcRect.h = dstRect.h = 10;
                 dstRect.x = x;
                 dstRect.y = y;
                 break;

@@ -8,8 +8,11 @@
 #include "TransformComponent.h"
 #include "ColliderComponent.h"
 #include "KeyboardComponent.h"
+#include "MouseComponent.h"
 #include "TileComponent.h"
-
+#include "GridComponent.h"
+#include "StateMachineComponent.h"
+#include "States.h"
 class Spare;
 
 #endif //SLATFORMER_COMPONENTS_H

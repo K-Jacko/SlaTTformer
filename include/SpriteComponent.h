@@ -22,6 +22,7 @@ public:
     std::map<const char*, Animation> animations;
     SDL_RendererFlip flip;
     SpriteComponent() = default;
+
     ~SpriteComponent()
     {
         SDL_DestroyTexture(texture);
@@ -37,11 +38,12 @@ public:
         srcRect.y = y;
     }
 
-    SpriteComponent(const char* path, bool t)
+    SpriteComponent(const char* path, int offsetX, int offsetY, bool t)
     {
 
         animated = t;
-        srcRect.x = srcRect.y = 0;
+        srcRect.x = offsetX;
+        srcRect.y = offsetY;
 
         Animation idle = Animation(0,10,100);
         Animation walk = Animation(1, 10, 100);

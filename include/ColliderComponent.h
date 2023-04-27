@@ -19,11 +19,9 @@ public:
     TransformComponent* transform;
     bool collidesWithPlayer = false;
 
-    ColliderComponent(std::string t, int xOff, int yOff)
+    ColliderComponent(std::string t)
     {
         tag = t;
-        xOffset = xOff;
-        yOffset = yOff;
     }
     ColliderComponent(std::string t, bool cwp)
     {
@@ -47,10 +45,11 @@ public:
 
     void Update() override
     {
-        collider.x = static_cast<int>(transform->position.x) + (yOffset * transform->scale);
-        collider.y = static_cast<int>(transform->position.y) + (yOffset * transform->scale);
-        collider.w = static_cast<int>((transform->width - xOffset) * transform->scale) ;
-        collider.h = static_cast<int>((transform->height - yOffset) * transform->scale) ;
+        collider.x = static_cast<int>(transform->position.x) + transform->scale;
+        collider.y = static_cast<int>(transform->position.y) + transform->scale;
+
+        collider.w = static_cast<int>(transform->width * transform->scale);
+        collider.h = static_cast<int>(transform->height * transform->scale);
     }
 
     void Debug() override

@@ -3,6 +3,8 @@
 #include "Game.h"
 #include <windows.h>
 #define FLOORTILE_NUMBER = int 7
+#define WINDOWX 1280
+#define WINDOWY 720
 
 
 //FloorTile floorTiles[7];
@@ -28,7 +30,7 @@ int main(int argc, char* args[])
 
 
     game = new Game();
-    game->Init("Cozy",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,720,1280, true);
+    game->Init("Cozy",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,WINDOWY,WINDOWX, true);
     while (game->Running())
     {
         QueryPerformanceCounter(&end_counter);

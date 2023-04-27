@@ -13,6 +13,10 @@ struct Animation
         speed = s;
     }
 
+    void OnAnimate()
+    {
+
+    }
 
 };
 #endif //SLATFORMER_ANIMATION_H

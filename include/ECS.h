@@ -54,20 +54,20 @@ using ComponentArray = std::array<Component*, maxComponents>;
 
 class Entity{
 public:
-    void Update()
+    virtual void Update()
     {
         for(auto& c : components) c->Update();
     }
-    void Draw()
+    virtual void Draw()
     {
         for(auto& c : components) c->Draw();
     }
-    void Debug()
+    virtual void Debug()
     {
         for(auto& c : components) c->Debug();
     }
     bool isActive() const { return active;}
-    void destroy() { active = false; }
+    virtual void destroy() { active = false; }
 
     template <typename T> bool hasComponent() const
     {
@@ -103,7 +103,6 @@ private:
     ComponentArray componentArray;
     ComponentBitSet componentBitSet;
 };
-
 class Manager
 {
 public:

@@ -38,10 +38,10 @@ CollisionResult Collision::AABB(const ColliderComponent& colA, const ColliderCom
             result.direction = CollisionDirection::Right;
             std::cout << "Right" << colB.tag << std::endl;
         } else if (std::abs(dy1) < std::abs(dy2)) {
-            colA.transform->position.y -= 1.9f;
+            colA.transform->position.y -= 1.0f;
             //colA.transform->velocity.Zero();
             result.direction = CollisionDirection::Up;
-            //colA.transform->kinematic = 0;
+            colA.transform->kinematic = 0;
             std::cout << "Up" << colB.tag << std::endl;
         } else {
             colA.transform->position.y += 1;

@@ -11,7 +11,7 @@ class Map
 public:
     Map();
     ~Map();
-    static void LoadMap(std::string path, int sizex, int sizey);
+    static void LoadMap(std::string path, int sizex, int sizey, int gridSize);
     static void LoadWalls(int xPos, int yPos, int xSize, int ySize);
 
 private:

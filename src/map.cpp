@@ -12,22 +12,21 @@ Map::~Map()
 
 }
 
-void Map::LoadMap(std::string path, int sizex, int sizey)
+void Map::LoadMap(std::string path, int sizex, int sizey, int gridSize)
 {
-    char tile;
-    std::fstream mapFile;
-    mapFile.open(path);
+//    char tile;
+//    std::fstream mapFile;
+//    mapFile.open(path);
+//
+//    for (int y = 0; y < sizey ; ++y) {
+//        for (int x = 0; x < sizex ; ++x) {
+//            mapFile.get(tile);
+//            Game::AddTile(atoi(&tile), x * gridSize, y * gridSize);
+//        }
+//    }
+//    mapFile.close();
 
-    for (int y = 0; y < sizey ; ++y) {
-        for (int x = 0; x < sizex ; ++x) {
-            mapFile.get(tile);
-            Game::AddTile(atoi(&tile), x * 48, y * 48);
-            mapFile.ignore();
-        }
-    }
-
-    mapFile.close();
-
+Game::AddTile(1,sizex / 2, sizey -80);
 }
 
 void Map::LoadWalls(int xPos, int yPos,int xSize, int ySize)
@@ -37,5 +36,4 @@ void Map::LoadWalls(int xPos, int yPos,int xSize, int ySize)
             Game::CreateWalls(xPos * x,yPos * y);
         }
     }
-
 }
