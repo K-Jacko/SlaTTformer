@@ -55,7 +55,11 @@ public:
     void Debug() override
     {
         if(Game::isDebug)
+        {
+            SDL_SetRenderDrawColor(Game::renderer, 0, 0, 0, 255);
             SDL_RenderDrawRect(Game::renderer,&collider);
+        }
+
 
     }
 };

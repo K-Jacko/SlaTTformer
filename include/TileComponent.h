@@ -19,7 +19,7 @@ public:
     {
         path = nullptr;
     };
-    TileComponent(int x, int y, int id)
+    TileComponent(int x, int y, int id, int gridSize)
     {
         path = nullptr;
         tileID = id;
@@ -37,23 +37,22 @@ public:
             case 1:
                 path = "resources/Tileset2.png";
                 //Grass
-//                srcRect.w = 32;
-//                srcRect.h = 32;
-                srcRect.x = srcRect.y = 0;
-                srcRect.w = dstRect.w = 25;
-                srcRect.h = dstRect.h = 10;
+                srcRect.x = 0;
+                srcRect.y = 0;
+                srcRect.w = 48;
+                srcRect.h = 48;
+                dstRect.w = dstRect.h = gridSize;
                 dstRect.x = x;
                 dstRect.y = y;
                 break;
             case 2:
                 path = "resources/Tileset.png";
-//                Wall
-//                wsrc.x = 48;
-//                wsrc.y = 48;
-//                wdst.x = wdst.y = 0;
-//                wsrc.w = 32;
-//                wdst.w = 48;
-//                wsrc.h = wdst.h = 46;
+                //Wall
+                srcRect.x = srcRect.y = 0;
+                dstRect.x = x;
+                dstRect.y = y;
+                srcRect.w = srcRect.h = 0;
+                dstRect.w = dstRect.h = gridSize;
                 break;
             case 3:
                 path = "resources/Tileset.png";
@@ -71,7 +70,7 @@ public:
 
     void Init() override
     {
-        entity->addComponent<TransformComponent>((float)dstRect.x,(float)dstRect.y,srcRect.w,srcRect.h,1);
+        entity->addComponent<TransformComponent>((float)dstRect.x,(float)dstRect.y,dstRect.w,dstRect.h,1);
         if(!entity->hasComponent<TransformComponent>())
         {
             entity->addComponent<TransformComponent>();

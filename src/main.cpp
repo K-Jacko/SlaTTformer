@@ -3,8 +3,8 @@
 #include "Game.h"
 #include <windows.h>
 #define FLOORTILE_NUMBER = int 7
-#define WINDOWX 1280
-#define WINDOWY 720
+#define WINDOWX 1366
+#define WINDOWY 768
 
 
 //FloorTile floorTiles[7];
@@ -65,6 +65,7 @@ int main(int argc, char* args[])
 
         game->HandleEvents();
         game->Update();
+        game->Collision();
         game->Render();
     }
     game->Clean();

@@ -21,7 +21,7 @@ public:
     int height, width = 80;
     int scale = 1;
 
-    float speed = 50.0f;
+    float speed = 2.0f;
     float friction = -0.15f;
     int kinematic = 0;
 

@@ -1,60 +1,113 @@
-//
-// Created by Wake on 4/12/2023.
-//
-
 #ifndef SLATFORMER_GRIDCOMPONENT_H
 #define SLATFORMER_GRIDCOMPONENT_H
-#include "Math.h"
-#include "ECS.h"
 #include "Game.h"
+#include <vector>
 
+struct GridObject
+{
+    GridObject(){
+        X = 0;
+        Y = 0;
+        ID = -100;
+    }
+    ~GridObject(){}
+    int ID;
+    int X,Y;
+
+};
 class GridComponent : public Component
 {
 public:
+    GridComponent(){}
     GridComponent(int _width, int _height, float _cellSize)
     {
-        width = _width;
+        width = _width + 1;
         height = _height;
         cellSize = _cellSize;
 
+        std::vector<std::vector<GridObject>> go(width, std::vector<GridObject>(height));
 
-        border.x = 0;
-        border.y = 0;
-        border.w = 10 - width;
-        border.h = 10 - height ;
+        int o = 0;
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                go[x][y].ID = o;
+                go[x][y].X = x;
+                go[x][y].Y = y;
+                o++;
+            }
+        }
+        gridOs = go;
+
+    }
+    void Init()
+    {
+
+
     }
     void Draw() override
     {
 
     }
-    void CreateGridObject(int x , int y)
+
+    int GetWidth()
     {
-//        grid_cursor_ghost.x = (event.motion.x / grid_cell_size) * grid_cell_size;
-//        grid_cursor_ghost.y = (event.motion.y / grid_cell_size) * grid_cell_size;
+        return width;
     }
+
+    int GetHeight()
+    {
+        return height;
+    }
+
+    int GetCellSize()
+    {
+        return cellSize;
+    }
+
+    int Get1DIndex(int x, int y)
+    {
+        return gridOs[x][y].ID;
+    }
+
+    std::vector<GridObject> GetCellsInBottomRow() const
+    {
+        std::vector<GridObject> result;
+        result.reserve(width); // Reserve enough space for all the cells in the bottom row
+        for (int x = 0; x < width; ++x) {
+            result.push_back(gridOs[x].back());
+        }
+        return result;
+    }
+
+    std::vector<GridObject> GetRightWall() const
+    {
+        return gridOs.back();
+    }
+
     void Debug() override
     {
-        for (int x = 0; x < 1 + width * cellSize;
-             x += cellSize) {
-            SDL_SetRenderDrawColor(Game::renderer, 0, 0, 0, 255);
-            SDL_RenderDrawLine(Game::renderer, x, 0, x, Game::WindowY);
+        if(Game::isDebug)   {
+            for (int x = 0; x < width; ++x) {
+                for (int y = 0; y < height; ++y)    {
+                    SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 255);
+                    SDL_Rect rc;
+                    rc.x = gridOs[x][y].X * cellSize;
+                    rc.y = gridOs[x][y].Y * cellSize;
+                    rc.w = 3;
+                    rc.h = 3;
+                    SDL_RenderDrawRect(Game::renderer, &rc);
+                }
+            }
         }
-
-        for (int y = 0; y < 1 + height * cellSize;
-             y += cellSize) {
-            SDL_SetRenderDrawColor(Game::renderer, 0, 0, 0, 255);
-            SDL_RenderDrawLine(Game::renderer, 0, y, Game::WindowX, y);
-        }
-
-        SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 255);
-        SDL_RenderDrawRect(Game::renderer, &border);
     }
+
+
 private:
     int width;
     int height;
-    float cellSize;
-    SDL_Rect border;
-
+    int cellSize;
+    std::vector<std::vector<GridObject>> gridOs;
+    int gridObjects;
 };
 
 

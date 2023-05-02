@@ -6,12 +6,14 @@
 #define SLATFORMER_MOUSECOMPONENT_H
 #include "ECS.h"
 #include "Game.h"
-#include "Components.h"
+#include "SpriteComponent.h"
+#include "GridComponent.h"
 
 class MouseComponent : public Component
 {
 public:
     SpriteComponent *spriteComponent;
+    GridComponent *gridComponent;
 
     void Init() override
     {
@@ -20,13 +22,20 @@ public:
             entity->addComponent<SpriteComponent>();
         }
         spriteComponent = &entity->getComponent<SpriteComponent>();
+
+        if(!entity->hasComponent<GridComponent>())
+        {
+            entity->addComponent<GridComponent>();
+        }
+        gridComponent = &entity->getComponent<GridComponent>();
     }
 
     void Update() override
     {
         switch (Game::event.type) {
             case SDL_MOUSEBUTTONDOWN:
-                std::cout << Game::mousePosition << std::endl;
+                std::cout << Game::mousePosition << gridComponent->Get1DIndex(Game::mousePosition.x,
+                                                                              Game::mousePosition.y) << std::endl;
                 break;
             case SDL_MOUSEBUTTONUP:
                 break;

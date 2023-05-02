@@ -7,8 +7,8 @@
 #include "SDL_ttf.h"
 #include "TextureManager.h"
 #include "Collision.h"
-#include "Map.h"
 #include <iostream>
+#include "ECS.h"
 
 
 class ColliderComponent;
@@ -21,6 +21,9 @@ public:
     void Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth, bool fullscreen);
     void HandleEvents();
     void Update();
+    void Collision();
+    void StateMachines();
+    void AI();
     void Render();
     void Clean();
     bool Running() { return isRunning;};
@@ -29,7 +32,6 @@ public:
     static int WindowY;
     static int GridSize;
     static void AddTile(int id, int x, int y);
-    static void CreateWalls(int x, int y);
     static SDL_Renderer* renderer;
     static SDL_Event event;
     static Vector2D mousePosition;

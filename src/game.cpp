@@ -1,21 +1,21 @@
 #include "Game.h"
-#include "ECS.h"
 #include "Components.h"
-#include "Math.h"
-
-Map* map;
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 Vector2D Game::mousePosition;
+
 int Game::WindowX;
 int Game::WindowY;
 int Game::GridSize;
+
 std::vector<ColliderComponent*> Game::colliders;
+
 float Game::deltaTime;
 
 bool Game::isDebug;
+
 auto& Director(manager.addEntity());
  auto& player(manager.addEntity());
  auto& wall(manager.addEntity());
@@ -81,24 +81,27 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
         std::cout << "Renderer :: Made " << SDL_GetError() << std::endl;
     }
 
-    //map = new Map();
+    //map = new MapComponent();
     isRunning = true;
 
 
 
-    Map::LoadMap("resources/Map1.map",WindowX ,WindowY ,GridSize);
-    //Map::LoadWalls(400,650, 20,10);
 
-    player.addComponent<TransformComponent>(WindowX / 2 - 120, WindowY - 220 ,GridSize, GridSize * 2 ,2,0);
+    //MapComponent::LoadWalls(400,650, 20,10);
+
+    Director.addComponent<TransformComponent>(0, 0, WindowX, WindowY, 1, 0);
+    Director.addComponent<SpriteComponent>("resources/Background.png");
+    Director.addComponent<GridComponent>(WindowX / GridSize, WindowY / GridSize, GridSize);
+    Director.addComponent<MouseComponent>();
+    Director.addComponent<MapComponent>();
+
+    player.addComponent<TransformComponent>(WindowX * 0.5, WindowY - 220 ,25, 50 ,2,1);
     player.addComponent<SpriteComponent>("resources/Character/_Idle.png", 44 , 42, true);
     player.addComponent<ColliderComponent>("player");
     player.addComponent<KeyboardComponent>();
 
-    Director.addComponent<TransformComponent>(0, 0, WindowX, WindowY, 1, 0);
-    Director.addComponent<SpriteComponent>("resources/Background.png", 100, 100);
-    Director.addComponent<GridComponent>(WindowX / GridSize - 1, WindowY / GridSize, GridSize);
-    Director.addComponent<MouseComponent>();
-    Director.addComponent<StateMachineComponent>();
+
+    //Director.addComponent<StateMachineComponent>();
 
 
 
@@ -127,10 +130,12 @@ void Game::Update()
 {
     manager.Refresh();
     manager.Update();
+}
 
+void Game::Collision()
+{
     for (auto& cc : colliders)
     {
-        //Collision::AABB(player.getComponent<ColliderComponent>() , *cc);
         Collision::AABB(player.getComponent<ColliderComponent>(), *cc,player.getComponent<TransformComponent>().velocity,cc->transform->velocity);
     }
 }
@@ -138,7 +143,6 @@ void Game::Update()
 void Game::Render()
 {
     SDL_RenderClear(renderer);
-    //map->DrawMap();
     manager.Draw();
     manager.Debug();
     SDL_RenderPresent(renderer);
@@ -160,17 +164,16 @@ Game::~Game()
 void Game::AddTile(int id, int x, int y)
 {
     auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(x,y,id);
-    if(id == 1)
-        tile.addComponent<ColliderComponent>("Grass",true);
+    tile.addComponent<TileComponent>(x,y,id,GridSize);
+    switch (id) {
+        case 0 :
 
-
-}
-
-void Game::CreateWalls(int x, int y)
-{
-    auto& wall(manager.addEntity());
-    wall.addComponent<TransformComponent>(x,y,32,32,1);
-    wall.addComponent<SpriteComponent>("resources/Tileset.png",48,48);
-    wall.addComponent<ColliderComponent>("wall", true);
+            break;
+        case 1 :
+            tile.addComponent<ColliderComponent>("Grass", true);
+            break;
+        case 2 :
+            tile.addComponent<ColliderComponent>("Wall", true);
+            break;
+    }
 }
