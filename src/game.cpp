@@ -1,14 +1,13 @@
 #include "Game.h"
-#include "Components.h"
+#include "Components/Components.h"
+#include "StateMachines/StateMachines.h"
+#include "Global.h"
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 Vector2D Game::mousePosition;
-
-int Game::WindowX;
-int Game::WindowY;
-int Game::GridSize;
+Camera* Game::camera;
 
 std::vector<ColliderComponent*> Game::colliders;
 
@@ -21,12 +20,10 @@ auto& Director(manager.addEntity());
  auto& wall(manager.addEntity());
 
  Game::Game(){}
-void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth, bool fullscreen)
+void Game::Init(const char* title, bool fullscreen)
 {
+     camera = new Camera(gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT);
     int flags = 0;
-    WindowX = sWidth;
-    WindowY = sHeight;
-    GridSize = 25;
     if(fullscreen)
     {
         flags = SDL_WINDOW_BORDERLESS;
@@ -61,7 +58,7 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
         std::cout << "Text :: Systems Initialised!" << std::endl;
     }
 
-    window = SDL_CreateWindow(title, sxPos, syPos, sWidth, sHeight, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow(title,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED, gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT, SDL_WINDOW_SHOWN);
 
     if(window == nullptr)
     {
@@ -89,22 +86,20 @@ void Game::Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth
 
     //MapComponent::LoadWalls(400,650, 20,10);
 
-    Director.addComponent<TransformComponent>(0, 0, WindowX, WindowY, 1, 0);
+    Director.addComponent<TransformComponent>(0, 0, gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT, 1, 0);
     Director.addComponent<SpriteComponent>("resources/Background.png");
-    Director.addComponent<GridComponent>(WindowX / GridSize, WindowY / GridSize, GridSize);
+    Director.addComponent<GridComponent>(gbl::SCREEN::WIDTH / gbl::GAME::CELL_SIZE, gbl::SCREEN::HEIGHT / gbl::GAME::CELL_SIZE, gbl::GAME::CELL_SIZE);
     Director.addComponent<MouseComponent>();
     Director.addComponent<MapComponent>();
 
-    player.addComponent<TransformComponent>(WindowX * 0.5, WindowY - 220 ,25, 50 ,2,1);
-    player.addComponent<SpriteComponent>("resources/Character/_Idle.png", 44 , 42, true);
+    player.addComponent<TransformComponent>(gbl::SCREEN::WIDTH * 0.5, gbl::SCREEN::HEIGHT - 220 ,21, 50 ,2,1);
+    player.addComponent<SpriteComponent>("resources/Character/_Idle.png", 43 , 42, true);
     player.addComponent<ColliderComponent>("player");
     player.addComponent<KeyboardComponent>();
+    player.addComponent<PlayerStateMachine>();
 
 
     //Director.addComponent<StateMachineComponent>();
-
-
-
 }
 
 
@@ -124,6 +119,11 @@ void Game::HandleEvents()
                     break;
             }
     }
+}
+
+void Game::UpdateCamera(gbl::CameraMovement cameraMovement)
+{
+     camera->Update(gbl::CameraMovement::Follow, player.getComponent<TransformComponent>().position.x / 2.0f, player.getComponent<TransformComponent>().position.x / 2.0f);
 }
 
 void Game::Update()
@@ -164,7 +164,7 @@ Game::~Game()
 void Game::AddTile(int id, int x, int y)
 {
     auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(x,y,id,GridSize);
+    tile.addComponent<TileComponent>(x,y,id,gbl::GAME::CELL_SIZE);
     switch (id) {
         case 0 :
 
@@ -176,4 +176,9 @@ void Game::AddTile(int id, int x, int y)
             tile.addComponent<ColliderComponent>("Wall", true);
             break;
     }
+}
+
+void Game::SetView(SDL_Rect camera)
+{
+
 }

@@ -77,7 +77,8 @@ public:
     {
         if(animated)
         {
-            srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+            //TODO:Dude....fix the animations
+            srcRect.x = 43 + srcRect.w * static_cast<int>(Game::deltaTime/ speed) % frames;
         }
 
         dstRect.x = static_cast<int>(transform->position.x);
@@ -88,7 +89,7 @@ public:
     }
     void Draw() override
     {
-        TextureManager::Draw(texture, srcRect, dstRect);
+        TextureManager::DrawEx(texture, srcRect, dstRect,flip);
     }
 
     void Play(const char* animationName)

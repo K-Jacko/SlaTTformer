@@ -9,6 +9,7 @@
 #include "Collision.h"
 #include <iostream>
 #include "ECS.h"
+#include "Camera.h"
 
 
 class ColliderComponent;
@@ -18,8 +19,9 @@ class Game
 public:
     Game();
     ~Game();
-    void Init(const char* title, int sxPos, int syPos, int sHeight, int sWidth, bool fullscreen);
+    void Init(const char* title, bool fullscreen);
     void HandleEvents();
+    void UpdateCamera(gbl::CameraMovement cameraMovement);
     void Update();
     void Collision();
     void StateMachines();
@@ -28,11 +30,11 @@ public:
     void Clean();
     bool Running() { return isRunning;};
     static float deltaTime;
-    static int WindowX;
-    static int WindowY;
-    static int GridSize;
     static void AddTile(int id, int x, int y);
+    static void SetView(SDL_Rect camera);
+
     static SDL_Renderer* renderer;
+    static Camera* camera;
     static SDL_Event event;
     static Vector2D mousePosition;
     static bool isDebug;

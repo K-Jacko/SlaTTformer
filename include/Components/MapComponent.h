@@ -44,8 +44,8 @@ public:
     }
 private:
     GridComponent gridComponent;
-    std::vector<GridObject> bottomRow;
-    std::vector<GridObject> rightWall;
+    std::vector<gbl::GridObject> bottomRow;
+    std::vector<gbl::GridObject> rightWall;
     int cellSize;
 
 };

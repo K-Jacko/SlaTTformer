@@ -2,19 +2,8 @@
 #define SLATFORMER_GRIDCOMPONENT_H
 #include "Game.h"
 #include <vector>
+#include "Global.h"
 
-struct GridObject
-{
-    GridObject(){
-        X = 0;
-        Y = 0;
-        ID = -100;
-    }
-    ~GridObject(){}
-    int ID;
-    int X,Y;
-
-};
 class GridComponent : public Component
 {
 public:
@@ -25,14 +14,14 @@ public:
         height = _height;
         cellSize = _cellSize;
 
-        std::vector<std::vector<GridObject>> go(width, std::vector<GridObject>(height));
+        std::vector<std::vector<gbl::GridObject>> go(width, std::vector<gbl::GridObject>(height));
 
         int o = 0;
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 go[x][y].ID = o;
-                go[x][y].X = x;
-                go[x][y].Y = y;
+                go[x][y].X = x ;
+                go[x][y].Y = y ;
                 o++;
             }
         }
@@ -43,6 +32,16 @@ public:
     {
 
 
+    }
+
+    void Update() override
+    {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                gridOs[x][y].X += Game::camera->view.x;
+                gridOs[x][y].Y += Game::camera->view.y;
+            }
+        }
     }
     void Draw() override
     {
@@ -69,9 +68,9 @@ public:
         return gridOs[x][y].ID;
     }
 
-    std::vector<GridObject> GetCellsInBottomRow() const
+    std::vector<gbl::GridObject> GetCellsInBottomRow() const
     {
-        std::vector<GridObject> result;
+        std::vector<gbl::GridObject> result;
         result.reserve(width); // Reserve enough space for all the cells in the bottom row
         for (int x = 0; x < width; ++x) {
             result.push_back(gridOs[x].back());
@@ -79,7 +78,7 @@ public:
         return result;
     }
 
-    std::vector<GridObject> GetRightWall() const
+    std::vector<gbl::GridObject> GetRightWall() const
     {
         return gridOs.back();
     }
@@ -106,7 +105,7 @@ private:
     int width;
     int height;
     int cellSize;
-    std::vector<std::vector<GridObject>> gridOs;
+    std::vector<std::vector<gbl::GridObject>> gridOs;
     int gridObjects;
 };
 

@@ -5,6 +5,7 @@
 #ifndef SLATFORMER_KEYBOARDCOMPONENT_H
 #define SLATFORMER_KEYBOARDCOMPONENT_H
 #include "Game.h"
+#include "Global.h"
 
 class KeyboardComponent : public Component
 {
@@ -32,19 +33,19 @@ public:
         {
             switch (Game::event.key.keysym.sym) {
                 case SDLK_w:
-                    transform->velocity.y -= transform->speed * 2;
+                    transform->velocity.y -= gbl::GAME::MAX_VERTICAL_SPEED;
                     transform->kinematic = 1;
                     break;
                 case SDLK_s:
                     spriteComponent->Play("resources/Character/_Crouch.png");
                     break;
                 case SDLK_a:
-                    transform->velocity.x -= transform->speed;
+                    transform->velocity.x -= gbl::PLAYER::MAX_HORIZONTAL_SPEED;
                     spriteComponent->Play("resources/Character/_Run.png");
                     spriteComponent->flip = SDL_FLIP_HORIZONTAL;
                     break;
                 case SDLK_d:
-                    transform->velocity.x += transform->speed;
+                    transform->velocity.x += gbl::PLAYER::MAX_HORIZONTAL_SPEED;
                     spriteComponent->Play("resources/Character/_Run.png");
                     spriteComponent->flip = SDL_FLIP_NONE;
                     break;
@@ -68,10 +69,10 @@ public:
                     break;
                 case SDLK_a:
                     spriteComponent->Play("resources/Character/_Idle.png");
-                    transform->velocity.x -= transform->speed;
+                    transform->velocity.x -= gbl::PLAYER::MAX_HORIZONTAL_SPEED;
                     break;
                 case SDLK_d:
-                    transform->velocity.x += transform->speed;
+                    transform->velocity.x += gbl::PLAYER::MAX_HORIZONTAL_SPEED;
                     spriteComponent->Play("resources/Character/_Idle.png");
                     break;
                 case SDLK_e:

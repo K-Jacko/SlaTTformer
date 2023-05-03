@@ -8,13 +8,13 @@ class StateMachine{
     State<T>* m_CurrentState;
     bool m_firstRun = true;
 public:
-    void Init(T* Owner, State<T>* initialState);
-    void Update();
+    void InitSM(T* Owner, State<T>* initialState);
+    void UpdateSM();
     void ChangeState(State<T>* newState);
 };
 
 template<class T>
-inline void StateMachine<T>::Init(T* Owner, State<T>* initialState)
+inline void StateMachine<T>::InitSM(T* Owner, State<T>* initialState)
 {
     m_CurrentState = initialState;
     m_Owner = Owner;
@@ -22,7 +22,7 @@ inline void StateMachine<T>::Init(T* Owner, State<T>* initialState)
 }
 
 template<class T>
-inline void StateMachine<T>::Update()
+inline void StateMachine<T>::UpdateSM()
 {
     if(m_firstRun)
     {

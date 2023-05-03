@@ -1,5 +1,5 @@
-#include "TestStateMachine.h"
-#include "TestStates.h"
+#include "StateMachines/TestStateMachine.h"
+#include "StateMachines/TestStates.h"
 
  TestStateMachine::TestStateMachine() {
     StartState = new class StartState();
@@ -15,6 +15,4 @@
     delete StateN;
 }
 
- void TestStateMachine::Update() {
-    StateMachine<TestStateMachine>::Update();
-}
+

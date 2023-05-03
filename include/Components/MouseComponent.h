@@ -40,8 +40,8 @@ public:
             case SDL_MOUSEBUTTONUP:
                 break;
             case SDL_MOUSEMOTION:
-                Game::mousePosition.x = Game::event.motion.x / Game::GridSize;
-                Game::mousePosition.y = Game::event.motion.y / Game::GridSize;
+                Game::mousePosition.x = Game::event.motion.x / gbl::GAME::CELL_SIZE;
+                Game::mousePosition.y = Game::event.motion.y / gbl::GAME::CELL_SIZE;
                 break;
         }
     }

@@ -2,14 +2,6 @@
 #include <SDL.h>
 #include "Game.h"
 #include <windows.h>
-#define FLOORTILE_NUMBER = int 7
-#define WINDOWX 1366
-#define WINDOWY 768
-
-
-//FloorTile floorTiles[7];
-//Entity entities[0];
-//Character player;
 
 Game* game = nullptr;
 LARGE_INTEGER frequency;
@@ -30,7 +22,7 @@ int main(int argc, char* args[])
 
 
     game = new Game();
-    game->Init("Cozy",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,WINDOWY,WINDOWX, true);
+    game->Init("Cozy", true);
     while (game->Running())
     {
         QueryPerformanceCounter(&end_counter);
