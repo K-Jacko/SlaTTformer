@@ -56,6 +56,7 @@ int main(int argc, char* args[])
         game->deltaTime = seconds_per_frame;
 
         game->HandleEvents();
+        game->UpdateCamera();
         game->Update();
         game->Collision();
         game->Render();

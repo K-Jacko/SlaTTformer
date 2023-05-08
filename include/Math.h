@@ -5,6 +5,11 @@
 #ifndef SLATFORMER_MATH_H
 #define SLATFORMER_MATH_H
 #include <iostream>
+#include <cmath>
+#include <cstring>
+#include <iostream>
+#include <initializer_list>
+#include <stdexcept>
 struct Vector2D
 {
     Vector2D();

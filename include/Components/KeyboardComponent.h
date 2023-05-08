@@ -31,28 +31,27 @@ public:
     {
         if(Game::event.type == SDL_KEYDOWN)
         {
-            switch (Game::event.key.keysym.sym) {
-                case SDLK_w:
-                    transform->velocity.y -= gbl::GAME::MAX_VERTICAL_SPEED;
-                    transform->kinematic = 1;
-                    break;
-                case SDLK_s:
-                    spriteComponent->Play("resources/Character/_Crouch.png");
-                    break;
-                case SDLK_a:
-                    transform->velocity.x -= gbl::PLAYER::MAX_HORIZONTAL_SPEED;
-                    spriteComponent->Play("resources/Character/_Run.png");
-                    spriteComponent->flip = SDL_FLIP_HORIZONTAL;
-                    break;
-                case SDLK_d:
-                    transform->velocity.x += gbl::PLAYER::MAX_HORIZONTAL_SPEED;
-                    spriteComponent->Play("resources/Character/_Run.png");
-                    spriteComponent->flip = SDL_FLIP_NONE;
-                    break;
-                case SDLK_e:
-                    break;
-                case SDLK_SPACE:
-                    Game::isDebug = true;
+            if(Game::event.key.keysym.sym == SDLK_w)
+            {
+                entity->AddInput(GetMovementVector(gbl::DIRECTION::Up));
+                transform->SetKinesis(true);
+
+            }
+            if(Game::event.key.keysym.sym == SDLK_s)
+            {
+                entity->AddInput(GetMovementVector(gbl::DIRECTION::Down));
+            }
+            if(Game::event.key.keysym.sym == SDLK_a)
+            {
+                entity->AddInput(GetMovementVector(gbl::DIRECTION::Left));
+                spriteComponent->Play("resources/Character/_Run.png");
+                spriteComponent->flip = SDL_FLIP_HORIZONTAL;
+            }
+            if(Game::event.key.keysym.sym == SDLK_d)
+            {
+                entity->AddInput(GetMovementVector(gbl::DIRECTION::Right));
+                spriteComponent->Play("resources/Character/_Run.png");
+                spriteComponent->flip = SDL_FLIP_NONE;
             }
         }
         else{
@@ -60,28 +59,42 @@ public:
         }
         if(Game::event.type == SDL_KEYUP)
         {
-            switch (Game::event.key.keysym.sym) {
-                case SDLK_w:
-                    break;
-                case SDLK_s:
-                    spriteComponent->Play("resources/Character/_Idle.png");
-                    transform->velocity.y = 0;
-                    break;
-                case SDLK_a:
-                    spriteComponent->Play("resources/Character/_Idle.png");
-                    transform->velocity.x -= gbl::PLAYER::MAX_HORIZONTAL_SPEED;
-                    break;
-                case SDLK_d:
-                    transform->velocity.x += gbl::PLAYER::MAX_HORIZONTAL_SPEED;
-                    spriteComponent->Play("resources/Character/_Idle.png");
-                    break;
-                case SDLK_e:
-                    spriteComponent->Play("resources/Character/_Idle.png");
-                case SDLK_SPACE:
-                    Game::isDebug = false;
-                    break;
+            if(Game::event.key.keysym.sym == SDLK_w)
+            {
+                entity->RemoveInput(GetMovementVector(gbl::DIRECTION::Up));
+                transform->SetKinesis(true);
+            }
+            if(Game::event.key.keysym.sym == SDLK_s)
+            {
+                entity->RemoveInput(GetMovementVector(gbl::DIRECTION::Down));
+                spriteComponent->Play("resources/Character/_Idle.png");
+            }
+            if(Game::event.key.keysym.sym == SDLK_a)
+            {
+                spriteComponent->Play("resources/Character/_Idle.png");
+                entity->RemoveInput(GetMovementVector(gbl::DIRECTION::Left));
+            }
+            if(Game::event.key.keysym.sym == SDLK_d)
+            {
+                entity->RemoveInput(GetMovementVector(gbl::DIRECTION::Right));
+                spriteComponent->Play("resources/Character/_Idle.png");
             }
         }
+    }
+
+    static Vector2D GetMovementVector(gbl::DIRECTION dir)
+    {
+        switch (dir) {
+            case gbl::Up:
+                return {0,-gbl::PLAYER::SPEED};
+            case gbl::Down:
+                return {0,gbl::PLAYER::SPEED};
+            case gbl::Left:
+                return {-gbl::PLAYER::SPEED,0};
+            case gbl::Right:
+                return {gbl::PLAYER::SPEED,0};
+        }
+        return {0,0};
     }
 };
 

@@ -1,28 +1,23 @@
+#include <vector>
 #include "Game.h"
 #include "Components/Components.h"
-#include "StateMachines/StateMachines.h"
 #include "Global.h"
-Manager manager;
-
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
-Vector2D Game::mousePosition;
-Camera* Game::camera;
+Entity* Game::fishingLines;
 
 std::vector<ColliderComponent*> Game::colliders;
 
 float Game::deltaTime;
+int Game::cameraMode = 0;
 
-bool Game::isDebug;
-
-auto& Director(manager.addEntity());
- auto& player(manager.addEntity());
- auto& wall(manager.addEntity());
+auto& Director(Manager::Instance().addEntity());
+ Player& player(Manager::Instance().addPlayer());
+ auto& wall(Manager::Instance().addEntity());
 
  Game::Game(){}
 void Game::Init(const char* title, bool fullscreen)
 {
-     camera = new Camera(gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT);
     int flags = 0;
     if(fullscreen)
     {
@@ -86,22 +81,22 @@ void Game::Init(const char* title, bool fullscreen)
 
     //MapComponent::LoadWalls(400,650, 20,10);
 
-    Director.addComponent<TransformComponent>(0, 0, gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT, 1, 0);
+    Director.addComponent<TransformComponent>(0, 0, gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT, 1, false);
     Director.addComponent<SpriteComponent>("resources/Background.png");
     Director.addComponent<GridComponent>(gbl::SCREEN::WIDTH / gbl::GAME::CELL_SIZE, gbl::SCREEN::HEIGHT / gbl::GAME::CELL_SIZE, gbl::GAME::CELL_SIZE);
-    Director.addComponent<MouseComponent>();
     Director.addComponent<MapComponent>();
 
-    player.addComponent<TransformComponent>(gbl::SCREEN::WIDTH * 0.5, gbl::SCREEN::HEIGHT - 220 ,21, 50 ,2,1);
+    player.addComponent<TransformComponent>(gbl::SCREEN::WIDTH * 0.5, gbl::SCREEN::HEIGHT - 220 ,21, 50 ,2,gbl::GAME::ISKINEIMATIC);
     player.addComponent<SpriteComponent>("resources/Character/_Idle.png", 43 , 42, true);
-    player.addComponent<ColliderComponent>("player");
-    player.addComponent<KeyboardComponent>();
+    player.addComponent<ColliderComponent>("Player");
     player.addComponent<PlayerStateMachine>();
+    player.addComponent<KeyboardComponent>();
+    player.addComponent<MouseComponent>();
+    Camera::Instance().SetPosition(player.getComponent<TransformComponent>().GetPosition());
 
 
     //Director.addComponent<StateMachineComponent>();
 }
-
 
 
 void Game::HandleEvents()
@@ -121,30 +116,37 @@ void Game::HandleEvents()
     }
 }
 
-void Game::UpdateCamera(gbl::CameraMovement cameraMovement)
+void Game::UpdateCamera()
 {
-     camera->Update(gbl::CameraMovement::Follow, player.getComponent<TransformComponent>().position.x / 2.0f, player.getComponent<TransformComponent>().position.x / 2.0f);
+    Camera::Instance().Update();
 }
 
 void Game::Update()
 {
-    manager.Refresh();
-    manager.Update();
+    Manager::Instance().Refresh();
+    Manager::Instance().Update();
 }
 
 void Game::Collision()
 {
     for (auto& cc : colliders)
     {
-        Collision::AABB(player.getComponent<ColliderComponent>(), *cc,player.getComponent<TransformComponent>().velocity,cc->transform->velocity);
+        CollisionResult playerResult = Collision::AABB(player.getComponent<ColliderComponent>(),*cc);
+        if(fishingLines)
+        {
+            CollisionResult result = Collision::AABB(fishingLines->getComponent<ColliderComponent>(), *cc);
+        }
+
+
     }
 }
 
 void Game::Render()
 {
     SDL_RenderClear(renderer);
-    manager.Draw();
-    manager.Debug();
+    Manager::Instance().Draw();
+    if(DEBUG)
+        Manager::Instance().Debug();
     SDL_RenderPresent(renderer);
 }
 
@@ -163,7 +165,7 @@ Game::~Game()
 
 void Game::AddTile(int id, int x, int y)
 {
-    auto& tile(manager.addEntity());
+    auto& tile(Manager::Instance().addEntity());
     tile.addComponent<TileComponent>(x,y,id,gbl::GAME::CELL_SIZE);
     switch (id) {
         case 0 :
@@ -178,7 +180,3 @@ void Game::AddTile(int id, int x, int y)
     }
 }
 
-void Game::SetView(SDL_Rect camera)
-{
-
-}

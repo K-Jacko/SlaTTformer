@@ -15,6 +15,7 @@ enum class CollisionDirection {
     Left,
     Right
 };
+//TODO:Do this
 struct CollisionResult {
     bool collides;
     SDL_Rect intersection;
@@ -26,8 +27,8 @@ class Collision
 {
 public:
     static bool AABB(const SDL_Rect& A, const SDL_Rect& B);
-    static bool AABB(const ColliderComponent& colA, const ColliderComponent& colB);
-    static CollisionResult AABB(const ColliderComponent& colA, const ColliderComponent& colB, const Vector2D& Avel, const Vector2D& Bvel);
+    //static bool AABB(const ColliderComponent& colA, const ColliderComponent& colB);
+    static CollisionResult AABB(const ColliderComponent& colA, const ColliderComponent& colB);
 
 };
 

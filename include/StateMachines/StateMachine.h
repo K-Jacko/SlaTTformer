@@ -9,7 +9,7 @@ class StateMachine{
     bool m_firstRun = true;
 public:
     void InitSM(T* Owner, State<T>* initialState);
-    void UpdateSM();
+    void TickMachine();
     void ChangeState(State<T>* newState);
 };
 
@@ -22,7 +22,7 @@ inline void StateMachine<T>::InitSM(T* Owner, State<T>* initialState)
 }
 
 template<class T>
-inline void StateMachine<T>::UpdateSM()
+inline void StateMachine<T>::TickMachine()
 {
     if(m_firstRun)
     {

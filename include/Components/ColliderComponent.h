@@ -45,22 +45,17 @@ public:
 
     void Update() override
     {
-        collider.x = static_cast<int>(transform->position.x) + transform->scale;
-        collider.y = static_cast<int>(transform->position.y) + transform->scale;
+        collider.x = static_cast<int>(transform->GetPosition()->x) + transform->GetScale();
+        collider.y = static_cast<int>(transform->GetPosition()->y) + transform->GetScale();
 
-        collider.w = static_cast<int>(transform->width * transform->scale);
-        collider.h = static_cast<int>(transform->height * transform->scale);
+        collider.w = static_cast<int>(transform->GetWidth() * transform->GetScale());
+        collider.h = static_cast<int>(transform->GetHeight() * transform->GetScale());
     }
 
     void Debug() override
     {
-        if(Game::isDebug)
-        {
-            SDL_SetRenderDrawColor(Game::renderer, 0, 0, 0, 255);
-            SDL_RenderDrawRect(Game::renderer,&collider);
-        }
-
-
+        SDL_SetRenderDrawColor(Game::renderer, 0, 0, 0, 255);
+        SDL_RenderDrawRect(Game::renderer,&collider);
     }
 };
 

@@ -21,20 +21,20 @@ public:
         cellSize = gridComponent.GetCellSize();
         rightWall = gridComponent.GetRightWall();
         LoadFloor();
-        LoadRightWall();
+        //LoadRightWall();
     }
 
     void LoadFloor()
     {
         for (const auto& cell : bottomRow) {
-            Game::AddTile(1,cell.X * cellSize,cell.Y * cellSize);
+            Game::AddTile(1,cell.X ,cell.Y );
         }
     }
 
     void LoadRightWall()
     {
         for (const auto& cell : rightWall) {
-            Game::AddTile(2,cell.X * cellSize,cell.Y * cellSize);
+            Game::AddTile(2,cell.X ,cell.Y );
         }
     }
 

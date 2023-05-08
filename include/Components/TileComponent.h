@@ -83,10 +83,10 @@ public:
 
     void Update() override
     {
-        dstRect.x = static_cast<int>(transform->position.x);
-        dstRect.y = static_cast<int>(transform->position.y);
-        dstRect.w = transform->width * transform->scale;
-        dstRect.h = transform->height * transform->scale;
+        dstRect.x = static_cast<int>(transform->GetPosition()->x);
+        dstRect.y = static_cast<int>(transform->GetPosition()->y);
+        dstRect.w = transform->GetWidth() * transform->GetScale();
+        dstRect.h = transform->GetHeight() * transform->GetScale();
     }
 
     void Draw() override

@@ -15,13 +15,14 @@
 
 class Component;
 class Entity;
+class Player;
 
 class Manager;
 
 class Component {
 public:
-    Entity* entity;
-    Component(){}
+    Entity* entity{};
+    Component()= default;
     virtual void Init() {}
 
     virtual void Update() {}
@@ -31,7 +32,6 @@ public:
     virtual ~Component() = default;
 
     virtual void Debug(){}
-
 };
 using ComponentID = std::size_t;
 
@@ -95,17 +95,63 @@ public:
         return *static_cast<T*>(ptr);
     }
 
+    void AddInput(Vector2D _vec)
+    {
+        auto vector = new Vector2D(_vec);
+        keyInputs.push_back(vector);
+    }
+    void AddInput(int i)
+    {
+        auto input = i;
+        mouseInputs.push_back(input);
+    }
+    void RemoveInput(int _i)
+    {
+        auto input = _i;
+        mouseInputs.erase(std::remove_if(mouseInputs.begin(), mouseInputs.end(), [&](int v) {return matchesTarget(v,input);}), mouseInputs.end());
+    }
+    void RemoveInput(Vector2D _vec)
+    {
+        auto vector = new Vector2D(_vec);
+        keyInputs.erase(std::remove_if(keyInputs.begin(), keyInputs.end(), [&](Vector2D* v) {return matchesTarget(*v, *vector);}), keyInputs.end());
+    }
+    static bool matchesTarget(int _i, int _j)
+    {
+        return _i == _j;
+    }
+    static bool matchesTarget(Vector2D v, Vector2D t)
+    {
+        return v.x == t.x && v.y == t.y;
+    }
+    std::vector<Vector2D*> GetKeyInputs(){return keyInputs;}
+    std::vector<int> GetMouseInputs(){return mouseInputs;}
+
 
 private:
     bool active = true;
     std::vector<std::unique_ptr<Component>> components;
-
     ComponentArray componentArray;
     ComponentBitSet componentBitSet;
+    std::vector<Vector2D*> keyInputs;
+    std::vector<int> mouseInputs;
+};
+
+class Player : public Entity
+{
+public:
+    void CastLine()
+    {
+        std::cout << "wawa" << std::endl;
+    }
 };
 class Manager
 {
 public:
+    static Manager& Instance()
+    {
+        static Manager instance;
+        return instance;
+    }
     void Update(){
         for (auto& e : entities) e->Update();
     }
@@ -125,6 +171,19 @@ public:
     {
         Entity* e = new Entity();
         std::unique_ptr<Entity> uPtr{e};
+        entities.emplace_back(std::move(uPtr));
+        return *e;
+    }
+    void addEntityRemote(Entity* entity)
+    {
+        std::unique_ptr<Entity> uPtr{entity};
+        entities.emplace_back(std::move(uPtr));
+    }
+
+    Player& addPlayer()
+    {
+        Player* e = new Player();
+        std::unique_ptr<Player> uPtr{e};
         entities.emplace_back(std::move(uPtr));
         return *e;
     }

@@ -21,29 +21,32 @@ public:
     ~Game();
     void Init(const char* title, bool fullscreen);
     void HandleEvents();
-    void UpdateCamera(gbl::CameraMovement cameraMovement);
+    void UpdateCamera();
     void Update();
     void Collision();
     void StateMachines();
     void AI();
+    void Input(Vector2D _input);
+    static void CastLine();
     void Render();
     void Clean();
     bool Running() { return isRunning;};
     static float deltaTime;
     static void AddTile(int id, int x, int y);
-    static void SetView(SDL_Rect camera);
+    static void SetView(SDL_Rect _camera);
 
     static SDL_Renderer* renderer;
-    static Camera* camera;
+    static int cameraMode;
     static SDL_Event event;
     static Vector2D mousePosition;
-    static bool isDebug;
     static std::vector<ColliderComponent*> colliders;
 
 private:
-    int counter;
+    static Entity* fishingLines;
+    static Vector2D* CameraTarget;
     bool isRunning;
     SDL_Window* window;
+
 };
 
 #endif //SLATFORMER_GAME_H

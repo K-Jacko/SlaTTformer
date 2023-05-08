@@ -20,7 +20,7 @@ public:
     int frames, speed;
     int animationIndex = 0;
     std::map<const char*, Animation> animations;
-    SDL_RendererFlip flip;
+    SDL_RendererFlip flip = SDL_RendererFlip::SDL_FLIP_NONE;
     SpriteComponent() = default;
 
     ~SpriteComponent()
@@ -30,6 +30,8 @@ public:
     SpriteComponent(const char* path)
     {
         SetTexture(path);
+        srcRect.x = 0;
+        srcRect.y = 0;
     }
     SpriteComponent(const char* path, int x, int y)
     {
@@ -70,8 +72,8 @@ public:
             entity->addComponent<TransformComponent>();
         }
         transform = &entity->getComponent<TransformComponent>();
-        srcRect.w = transform->width;
-        srcRect.h = transform->height;
+        srcRect.w = transform->GetWidth();
+        srcRect.h = transform->GetHeight();
     }
     void Update() override
     {
@@ -81,10 +83,10 @@ public:
             srcRect.x = 43 + srcRect.w * static_cast<int>(Game::deltaTime/ speed) % frames;
         }
 
-        dstRect.x = static_cast<int>(transform->position.x);
-        dstRect.y = static_cast<int>(transform->position.y);
-        dstRect.w = transform->width * transform->scale;
-        dstRect.h = transform->height * transform->scale;
+        dstRect.x = static_cast<int>(transform->GetPosition()->x);
+        dstRect.y = static_cast<int>(transform->GetPosition()->y);
+        dstRect.w = transform->GetWidth() * transform->GetScale();
+        dstRect.h = transform->GetHeight() * transform->GetScale();
         animationIndex++;
     }
     void Draw() override
