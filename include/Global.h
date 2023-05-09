@@ -67,6 +67,20 @@ namespace gbl
         float launchSpeed = 10;
     };
 
+    enum class CollisionDirection {
+        None,
+        Up,
+        Down,
+        Left,
+        Right
+    };
+
+    struct CollisionResult {
+        bool collides;
+        SDL_Rect intersection;
+        CollisionDirection direction; // 0: top, 1: right, 2: bottom, 3: left
+    };
+
     struct GridObject
     {
         GridObject(){

@@ -5,6 +5,7 @@
 #ifndef SLATFORMER_COLLIDERCOMPONENT_H
 #define SLATFORMER_COLLIDERCOMPONENT_H
 #include <string>
+#include <utility>
 #include "SDL.h"
 #include "TransformComponent.h"
 #include "ECS.h"
@@ -13,24 +14,15 @@
 class ColliderComponent : public Component
 {
 public:
-    SDL_Rect collider;
+    SDL_Rect collider{};
     std::string tag;
-    int xOffset, yOffset;
-    TransformComponent* transform;
-    bool collidesWithPlayer = false;
+    TransformComponent* transform{};
 
-    ColliderComponent(std::string t)
+    explicit ColliderComponent(std::string t)
     {
-        tag = t;
+        tag = std::move(t);
     }
-    ColliderComponent(std::string t, bool cwp)
-    {
-        tag = t;
-        xOffset = 0;
-        yOffset = 0;
-        collidesWithPlayer = cwp;
-    }
-    ~ColliderComponent() override{}
+    ~ColliderComponent() override   = default;
 
     void Init() override
     {

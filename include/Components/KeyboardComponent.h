@@ -44,13 +44,13 @@ public:
             if(Game::event.key.keysym.sym == SDLK_a)
             {
                 entity->AddInput(GetMovementVector(gbl::DIRECTION::Left));
-                spriteComponent->Play("resources/Character/_Run.png");
+                spriteComponent->Play("resources/Entities/Player/Player_SIDE_STATIC_32x32.png");
                 spriteComponent->flip = SDL_FLIP_HORIZONTAL;
             }
             if(Game::event.key.keysym.sym == SDLK_d)
             {
                 entity->AddInput(GetMovementVector(gbl::DIRECTION::Right));
-                spriteComponent->Play("resources/Character/_Run.png");
+                spriteComponent->Play("resources/Entities/Player/Player_SIDE_STATIC_32x32.png");
                 spriteComponent->flip = SDL_FLIP_NONE;
             }
         }
@@ -67,17 +67,17 @@ public:
             if(Game::event.key.keysym.sym == SDLK_s)
             {
                 entity->RemoveInput(GetMovementVector(gbl::DIRECTION::Down));
-                spriteComponent->Play("resources/Character/_Idle.png");
+                spriteComponent->Play("resources/Entities/Player/Player_Front_STATIC_32x32.png");
             }
             if(Game::event.key.keysym.sym == SDLK_a)
             {
-                spriteComponent->Play("resources/Character/_Idle.png");
+                spriteComponent->Play("resources/Entities/Player/Player_Front_STATIC_32x32.png");
                 entity->RemoveInput(GetMovementVector(gbl::DIRECTION::Left));
             }
             if(Game::event.key.keysym.sym == SDLK_d)
             {
                 entity->RemoveInput(GetMovementVector(gbl::DIRECTION::Right));
-                spriteComponent->Play("resources/Character/_Idle.png");
+                spriteComponent->Play("resources/Entities/Player/Player_Front_STATIC_32x32.png");
             }
         }
     }

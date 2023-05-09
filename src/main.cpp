@@ -20,7 +20,6 @@ int main(int argc, char* args[])
     QueryPerformanceCounter(&start_counter);
     QueryPerformanceFrequency(&frequency);
 
-
     game = new Game();
     game->Init("Cozy", true);
     while (game->Running())

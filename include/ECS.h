@@ -17,7 +17,7 @@ class Component;
 class Entity;
 class Player;
 
-class Manager;
+class EntityManager;
 
 class Component {
 public:
@@ -67,7 +67,11 @@ public:
         for(auto& c : components) c->Debug();
     }
     bool isActive() const { return active;}
-    virtual void destroy() { active = false; }
+    virtual void destroy()
+    {
+
+        active = false;
+    }
 
     template <typename T> bool hasComponent() const
     {
@@ -136,20 +140,12 @@ private:
     std::vector<int> mouseInputs;
 };
 
-class Player : public Entity
+class EntityManager
 {
 public:
-    void CastLine()
+    static EntityManager& Instance()
     {
-        std::cout << "wawa" << std::endl;
-    }
-};
-class Manager
-{
-public:
-    static Manager& Instance()
-    {
-        static Manager instance;
+        static EntityManager instance;
         return instance;
     }
     void Update(){
@@ -171,19 +167,6 @@ public:
     {
         Entity* e = new Entity();
         std::unique_ptr<Entity> uPtr{e};
-        entities.emplace_back(std::move(uPtr));
-        return *e;
-    }
-    void addEntityRemote(Entity* entity)
-    {
-        std::unique_ptr<Entity> uPtr{entity};
-        entities.emplace_back(std::move(uPtr));
-    }
-
-    Player& addPlayer()
-    {
-        Player* e = new Player();
-        std::unique_ptr<Player> uPtr{e};
         entities.emplace_back(std::move(uPtr));
         return *e;
     }

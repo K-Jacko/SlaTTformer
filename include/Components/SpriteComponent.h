@@ -6,7 +6,6 @@
 #define SLATFORMER_SPRITECOMPONENT_H
 #include "TransformComponent.h"
 #include "TextureManager.h"
-#include "Components.h"
 #include "SDL.h"
 #include "Animation.h"
 #include <map>
@@ -17,7 +16,8 @@ class SpriteComponent : public Component
 {
 
 public:
-    int frames, speed;
+    int frames = 0;
+    int speed = 0;
     int animationIndex = 0;
     std::map<const char*, Animation> animations;
     SDL_RendererFlip flip = SDL_RendererFlip::SDL_FLIP_NONE;
@@ -38,6 +38,10 @@ public:
         SetTexture(path);
         srcRect.x = x;
         srcRect.y = y;
+        transform = nullptr;
+        srcRect = {0,0,0,0};
+        dstRect = {0,0,0,0};
+
     }
 
     SpriteComponent(const char* path, int offsetX, int offsetY, bool t)
@@ -52,12 +56,12 @@ public:
         Animation attack = Animation(2,6,100);
         Animation crouch = Animation(3,1,100);
 
-        animations.emplace("resources/Character/_Idle.png", idle);
-        animations.emplace("resources/Character/_Run.png", walk);
+        animations.emplace("resources/Entities/Player/Player_Front_STATIC_32x32.png", idle);
+        animations.emplace("resources/Entities/Player/Player_SIDE_STATIC_32x32.png", walk);
         animations.emplace("resources/Character/_Attack2NoMovement.png", attack);
         animations.emplace("resources/Character/_Crouch.png", crouch);
 
-        Play("resources/Character/_Idle.png");
+        Play("resources/Entities/Player/Player_Front_STATIC_32x32.png");
     }
 
     void SetTexture(const char* path)
@@ -72,22 +76,31 @@ public:
             entity->addComponent<TransformComponent>();
         }
         transform = &entity->getComponent<TransformComponent>();
-        srcRect.w = transform->GetWidth();
-        srcRect.h = transform->GetHeight();
+
     }
     void Update() override
     {
-        if(animated)
+        if(isActive)
         {
-            //TODO:Dude....fix the animations
-            srcRect.x = 43 + srcRect.w * static_cast<int>(Game::deltaTime/ speed) % frames;
+            if(animated)
+            {
+                //TODO:Dude....fix the animations
+                srcRect.x = 43 + srcRect.w * static_cast<int>(Game::deltaTime/ speed) % frames;
+            }
+
+            dstRect.x = static_cast<int>(transform->GetPosition()->x);
+            dstRect.y = static_cast<int>(transform->GetPosition()->y);
+            dstRect.w = transform->GetWidth() * transform->GetScale();
+            dstRect.h = transform->GetHeight() * transform->GetScale();
+            srcRect.w = transform->GetWidth();
+            srcRect.h = transform->GetHeight();
+            animationIndex++;
+        }
+        else
+        {
+            dstRect.x = dstRect.y = srcRect.w = srcRect.h = 0;
         }
 
-        dstRect.x = static_cast<int>(transform->GetPosition()->x);
-        dstRect.y = static_cast<int>(transform->GetPosition()->y);
-        dstRect.w = transform->GetWidth() * transform->GetScale();
-        dstRect.h = transform->GetHeight() * transform->GetScale();
-        animationIndex++;
     }
     void Draw() override
     {
@@ -106,11 +119,17 @@ public:
     {
         Play("resources/Character/_Idle.png");
     }
+
+    bool IsActive(bool _isActive)
+    {
+        isActive = _isActive;
+        return isActive;
+    }
 private:
     TransformComponent* transform;
     SDL_Texture *texture;
     SDL_Rect srcRect, dstRect;
-
     bool animated = false;
+    bool isActive = true;
 };
 #endif //SLATFORMER_SPRITECOMPONENT_H

@@ -26,26 +26,20 @@ public:
     void Collision();
     void StateMachines();
     void AI();
-    void Input(Vector2D _input);
-    static void CastLine();
     void Render();
     void Clean();
     bool Running() { return isRunning;};
     static float deltaTime;
     static void AddTile(int id, int x, int y);
     static void SetView(SDL_Rect _camera);
-
     static SDL_Renderer* renderer;
-    static int cameraMode;
     static SDL_Event event;
-    static Vector2D mousePosition;
     static std::vector<ColliderComponent*> colliders;
 
 private:
-    static Entity* fishingLines;
-    static Vector2D* CameraTarget;
     bool isRunning;
     SDL_Window* window;
+    Entity* Player;
 
 };
 

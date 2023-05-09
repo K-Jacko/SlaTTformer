@@ -2,7 +2,7 @@
 #define SLATFORMER_PLAYERSTATEMACHINE_H
 #include "StateMachine.h"
 #include "ECS.h"
-#include "PlayerStates.h"
+#include "FishingStates.h"
 
 class PlayerStateMachine : public Component, public StateMachine<PlayerStateMachine>
 {
@@ -15,16 +15,19 @@ public:
     {
         TickMachine();
     };
-    bool cs = false;
+    //TODO: PUT THIS INTO CollisionResult
+    Vector2D hitPoint;
+    Entity* fish = nullptr;
+    Entity* fLine = nullptr;
+    Entity* ex = nullptr;
     bool isDone = false;
     void Done(){isDone = true;}
-    void cast(){cs = true;}
     PlayerStateMachine()
     {
-        PStartState = new class PStartState();
-        PState1 = new class PState1();
-        PState2 = new class PState2();
-        PStateN = new class PStateN();
+        PStartState = new class StartFishingState();
+        PState1 = new class CastFishingState();
+        PState2 = new class PulledFishingState();
+        PStateN = new class SpawnFishingState();
         InitSM(this,PStartState);
 
     };

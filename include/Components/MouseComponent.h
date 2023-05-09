@@ -32,7 +32,7 @@ public:
                 if(Game::event.button.button == SDL_BUTTON_RIGHT)
                 {
                     entity->AddInput(2);
-                    Game::cameraMode = 2;
+
                 }
                 break;
             case SDL_MOUSEBUTTONUP:
@@ -43,9 +43,7 @@ public:
                 if(Game::event.button.button == SDL_BUTTON_RIGHT)
                 {
                     entity->RemoveInput(2);
-                    Game::cameraMode = 2;
                 }
-                Game::cameraMode = 0;
                 break;
             case SDL_MOUSEMOTION:
                 SetMousePosition(mousePosition.x / gbl::GAME::CELL_SIZE - Camera::Instance().view.x, mousePosition.y / gbl::GAME::CELL_SIZE - Camera::Instance().view.y);

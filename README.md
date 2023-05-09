@@ -11,7 +11,7 @@ Currently you are a knight
 ### V 0.3
 - Animations and Keyboard Movement
 - ECS and component system 
-- AABB Collision
+- AABBPlayer Collision
 - <img src="resources/GitResources/collider1.gif">
 
 |                                                                          Animations                                                                           |                     Media                      |
