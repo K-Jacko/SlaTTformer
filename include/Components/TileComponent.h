@@ -77,7 +77,7 @@ public:
         }
         transform = &entity->getComponent<TransformComponent>();
 
-        texture = TextureManager::LoadTexture(path);
+        texture = TextureManager::GetTexture(0);
 
     }
 
@@ -91,7 +91,7 @@ public:
 
     void Draw() override
     {
-        TextureManager::Draw(texture, srcRect, dstRect);
+        TextureManager::Draw(texture, srcRect, dstRect, SDL_RendererFlip::SDL_FLIP_NONE);
     }
 
 private:

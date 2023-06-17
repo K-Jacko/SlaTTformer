@@ -20,26 +20,29 @@ public:
     Game();
     ~Game();
     void Init(const char* title, bool fullscreen);
+    void InitMainSystems(const char* title, bool fullscreen);
+    void InitEntities();
     void HandleEvents();
-    void UpdateCamera();
-    void Update();
+    static void UpdateCamera();
+    static void Update();
     void Collision();
     void StateMachines();
     void AI();
-    void Render();
+    static void Render();
     void Clean();
     bool Running() { return isRunning;};
     static float deltaTime;
     static void AddTile(int id, int x, int y);
     static void SetView(SDL_Rect _camera);
+    static TextureManager textureManager;
     static SDL_Renderer* renderer;
     static SDL_Event event;
     static std::vector<ColliderComponent*> colliders;
 
 private:
-    bool isRunning;
-    SDL_Window* window;
-    Entity* Player;
+    bool isRunning = false;
+    SDL_Window* window = nullptr;
+    Entity* Player = nullptr;
 
 };
 

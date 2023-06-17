@@ -23,19 +23,19 @@ public:
     SDL_RendererFlip flip = SDL_RendererFlip::SDL_FLIP_NONE;
     SpriteComponent() = default;
 
-    ~SpriteComponent()
+    ~SpriteComponent() override
     {
         SDL_DestroyTexture(texture);
     }
-    SpriteComponent(const char* path)
+    SpriteComponent(int index)
     {
-        SetTexture(path);
+        SetTexture(index);
         srcRect.x = 0;
         srcRect.y = 0;
     }
-    SpriteComponent(const char* path, int x, int y)
+    SpriteComponent(int index, int x, int y)
     {
-        SetTexture(path);
+        SetTexture(index);
         srcRect.x = x;
         srcRect.y = y;
         transform = nullptr;
@@ -44,30 +44,21 @@ public:
 
     }
 
-    SpriteComponent(const char* path, int offsetX, int offsetY, bool t)
+    SpriteComponent(bool t)
     {
 
         animated = t;
-        srcRect.x = offsetX;
-        srcRect.y = offsetY;
+        srcRect.x = 0;
+        srcRect.y = 0;
 
-        Animation idle = Animation(0,10,100);
-        Animation walk = Animation(1, 10, 100);
-        Animation attack = Animation(2,6,100);
-        Animation crouch = Animation(3,1,100);
+        Animation idle = Animation(0,6,100);
+        animations.emplace("resources/Entities/Player/PLAYER_IDLE.png", idle);
 
-        animations.emplace("resources/Entities/Player/Player_Front_STATIC_32x32.png", idle);
-        animations.emplace("resources/Entities/Player/Player_SIDE_STATIC_32x32.png", walk);
-        animations.emplace("resources/Character/_Attack2NoMovement.png", attack);
-        animations.emplace("resources/Character/_Crouch.png", crouch);
 
-        Play("resources/Entities/Player/Player_Front_STATIC_32x32.png");
+        Play("resources/Entities/Player/PLAYER_IDLE.png");
     }
 
-    void SetTexture(const char* path)
-    {
-        texture = TextureManager::LoadTexture(path);
-    }
+
 
     void Init() override
     {
@@ -85,7 +76,7 @@ public:
             if(animated)
             {
                 //TODO:Dude....fix the animations
-                srcRect.x = 43 + srcRect.w * static_cast<int>(Game::deltaTime/ speed) % frames;
+                srcRect.x = srcRect.w * static_cast<int>(Game::deltaTime/ speed) % frames;
             }
 
             dstRect.x = static_cast<int>(transform->GetPosition()->x);
@@ -104,12 +95,12 @@ public:
     }
     void Draw() override
     {
-        TextureManager::DrawEx(texture, srcRect, dstRect,flip);
+        TextureManager::Draw(texture, srcRect, dstRect,flip);
     }
 
     void Play(const char* animationName)
     {
-        SetTexture(animationName);
+        SetTexture(0);
         frames = animations[animationName].frames;
         speed = animations[animationName].speed;
         animationIndex = animations[animationName].index;
@@ -125,6 +116,13 @@ public:
         isActive = _isActive;
         return isActive;
     }
+
+    void SetTexture(int index)
+    {
+        texture = TextureManager::GetTexture(index);
+    }
+
+
 private:
     TransformComponent* transform;
     SDL_Texture *texture;

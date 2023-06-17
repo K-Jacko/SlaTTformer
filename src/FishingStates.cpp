@@ -34,7 +34,7 @@ void CastFishingState::Enter(PlayerStateMachine *Owner)
         Owner->fLine->getComponent<TransformComponent>().SetArc(gbl::Arc(10, 3));
         Camera::Instance().SetPosition(Owner->fLine->getComponent<TransformComponent>().GetPosition());
         Owner->fLine->addComponent<ColliderComponent>("Bait");
-        Owner->fLine->addComponent<SpriteComponent>("resources/Bobber.png",0,0);
+        Owner->fLine->addComponent<SpriteComponent>(4,0,0);
     }
     else{
         Owner->fLine->getComponent<SpriteComponent>().IsActive(true);
@@ -120,7 +120,7 @@ void SpawnFishingState::Enter(PlayerStateMachine *Owner)
         Owner->fish->addComponent<TransformComponent>(Owner->hitPoint.x,Owner->hitPoint.y,32,32,1,false,5);
         Owner->fish->getComponent<TransformComponent>().SetArc(gbl::Arc(-90, 0.001f));
         Owner->fish->addComponent<ColliderComponent>("Fish");
-        Owner->fish->addComponent<SpriteComponent>("resources/Fish Prototype_1.png",0,0);
+        Owner->fish->addComponent<SpriteComponent>(5,0,0);
     }
     else{
         Owner->fish->getComponent<TransformComponent>().SetPosition(Owner->hitPoint.x,Owner->hitPoint.y);

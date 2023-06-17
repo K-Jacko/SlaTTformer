@@ -2,15 +2,45 @@
 #include "Game.h"
 #include "Components/Components.h"
 #include "Global.h"
+
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
-
+TextureManager Game::textureManager;
 std::vector<ColliderComponent*> Game::colliders;
-
 float Game::deltaTime;
+Game::Game()= default;
 
- Game::Game(){}
 void Game::Init(const char* title, bool fullscreen)
+{
+
+    InitMainSystems(title, fullscreen);
+    InitEntities();
+    isRunning = true;
+}
+
+void Game::InitEntities()
+{
+    textureManager.Init();
+    auto& Director(EntityManager::Instance().addEntity());
+    Player = &EntityManager::Instance().addEntity();
+
+    //MapComponent::LoadWalls(400,650, 20,10);
+
+    Director.addComponent<TransformComponent>(0, 0, gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT, 1, false);
+    Director.addComponent<SpriteComponent>("resources/Background.png");
+    Director.addComponent<GridComponent>(gbl::SCREEN::WIDTH / gbl::GAME::CELL_SIZE, gbl::SCREEN::HEIGHT / gbl::GAME::CELL_SIZE, gbl::GAME::CELL_SIZE);
+    Director.addComponent<MapComponent>();
+
+    Player->addComponent<TransformComponent>(gbl::SCREEN::WIDTH * 0.5, gbl::SCREEN::HEIGHT - 220 ,32, 32 ,4,gbl::GAME::ISKINEIMATIC);
+    Player->addComponent<SpriteComponent>(true);
+    Player->addComponent<ColliderComponent>("Player");
+    Player->addComponent<PlayerStateMachine>();
+    Player->addComponent<KeyboardComponent>();
+    Player->addComponent<MouseComponent>();
+    Camera::Instance().SetPosition(Player->getComponent<TransformComponent>().GetPosition());
+}
+
+void Game::InitMainSystems(const char *title, bool fullscreen)
 {
     int flags = 0;
     if(fullscreen)
@@ -66,32 +96,7 @@ void Game::Init(const char* title, bool fullscreen)
     {
         std::cout << "Renderer :: Made " << SDL_GetError() << std::endl;
     }
-
-    //map = new MapComponent();
-    isRunning = true;
-
-
-    auto& Director(EntityManager::Instance().addEntity());
-    Player = &EntityManager::Instance().addEntity();
-
-    //MapComponent::LoadWalls(400,650, 20,10);
-
-    Director.addComponent<TransformComponent>(0, 0, gbl::SCREEN::WIDTH, gbl::SCREEN::HEIGHT, 1, false);
-    Director.addComponent<SpriteComponent>("resources/Background.png");
-    Director.addComponent<GridComponent>(gbl::SCREEN::WIDTH / gbl::GAME::CELL_SIZE, gbl::SCREEN::HEIGHT / gbl::GAME::CELL_SIZE, gbl::GAME::CELL_SIZE);
-    Director.addComponent<MapComponent>();
-
-    Player->addComponent<TransformComponent>(gbl::SCREEN::WIDTH * 0.5, gbl::SCREEN::HEIGHT - 220 ,32, 32 ,4,gbl::GAME::ISKINEIMATIC);
-    Player->addComponent<SpriteComponent>("resources/Entities/Player/Player_Front_STATIC_32x32.png");
-    Player->addComponent<ColliderComponent>("Player");
-    Player->addComponent<PlayerStateMachine>();
-    Player->addComponent<KeyboardComponent>();
-    Player->addComponent<MouseComponent>();
-    Camera::Instance().SetPosition(Player->getComponent<TransformComponent>().GetPosition());
-
-
-    //Director.addComponent<StateMachineComponent>();
-}
+ }
 
 
 void Game::HandleEvents()
@@ -157,7 +162,7 @@ void Game::AddTile(int id, int x, int y)
     auto& tile(EntityManager::Instance().addEntity());
     tile.addComponent<TileComponent>(x,y,id,gbl::GAME::CELL_SIZE);
     switch (id) {
-        case 0 :
+        default :
 
             break;
         case 1 :

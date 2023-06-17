@@ -2,6 +2,7 @@
 #include <chrono>
 #include <cmath>
 #include <regex>
+#include <fstream>
 #include "Math.h"
 #ifdef NDEBUG
 // Debugging information is enabled
@@ -79,6 +80,23 @@ namespace gbl
         bool collides;
         SDL_Rect intersection;
         CollisionDirection direction; // 0: top, 1: right, 2: bottom, 3: left
+    };
+
+    struct SpriteData{
+        float OriginX = 0;
+        float OriginY = 0;
+        std::string TEXTURE_ID = "nullptr";
+        float SPRITE_HEIGHT = 0;
+        float SPRITE_WIDTH = 0;
+        float TEXTURE_X = 0;
+        float TEXTURE_Y = 0;
+        int TEXTURE_INDEX = 0;
+    };
+
+    struct AnimationData{
+        static const int WALKING_ANIMATION_FRAMES;
+        std::vector<SDL_Rect> SPRITE_CLIPS;
+        SDL_Texture* SPRITE_SHEET_TEXTURE;
     };
 
     struct GridObject
